@@ -1,0 +1,1 @@
+export 'package:fitgoal_app/widgets/appbar.dart';
