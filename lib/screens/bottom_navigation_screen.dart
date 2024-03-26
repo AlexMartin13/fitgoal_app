@@ -14,10 +14,10 @@ class BottomNavigation extends StatefulWidget {
 class _BottomNavigationState extends State<BottomNavigation> {
   final List<Widget> _pages = [
     Container(
-      color: Colors.red,
+      color: const Color.fromRGBO(1, 49, 45, 1),
     ),
     Container(
-      color: Colors.yellow,
+      color: const Color.fromRGBO(1, 49, 45, 1),
     ),
   ];
 

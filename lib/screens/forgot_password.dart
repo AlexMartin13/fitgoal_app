@@ -22,7 +22,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             ),
           ),
           onTap: () {
-            Navigator.popAndPushNamed(context, '/');
+            Navigator.pop(context);
           },
         ),
       ),
