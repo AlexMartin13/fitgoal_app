@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-AppBar appBarFitGoal() {
+AppBar appBarFitGoalComplete() {
   return AppBar(
     backgroundColor: Color.fromRGBO(114, 191, 1, 1),
     toolbarHeight: 120,

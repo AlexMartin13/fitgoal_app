@@ -1,8 +1,12 @@
+import 'package:flutter/services.dart';
+import 'package:fitgoal_app/services/login_service.dart';
 import 'package:fitgoal_app/ui/button_decoration.dart';
 import 'package:fitgoal_app/ui/input_decoration.dart';
 import 'package:fitgoal_app/widgets/appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+  final _formKey = GlobalKey<FormState>();
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -11,10 +15,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarFitGoal(),
+      appBar: appBarFitGoalComplete(),
       backgroundColor: const Color.fromRGBO(1, 49, 45, 1),
       body: SingleChildScrollView(
         child: _LoginBlock(context),
@@ -28,48 +33,12 @@ class _LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Form(
+        key: _formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             children: [
-              TextFormField(
-                validator: (value) {
-                  String pattern =
-                      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                  RegExp regExp = new RegExp(pattern);
-                  return regExp.hasMatch(value ?? '')
-                      ? null
-                      : 'Introduce un email valido';
-                },
-                autocorrect: false,
-                keyboardType: TextInputType.emailAddress,
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecorations.authInputDecoration(
-                  hintText: 'john.doe@gmail.com',
-                  labelText: 'EMAIL',
-                  prefixIcon: Icons.alternate_email_sharp,
-                  color: Colors.white,
-                  textSize: 15,
-                ),
-              ),
-              TextFormField(
-                validator: (value) {
-                  if (value == null || value.length < 6) {
-                    return 'La contraseña debe contener al menos 6 caracteres';
-                  }
-                  return null;
-                },
-                autocorrect: false,
-                keyboardType: TextInputType.visiblePassword,
-                obscureText: true,
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecorations.authInputDecoration(
-                  hintText: 'Contraseña',
-                  labelText: 'CONTRASEÑA',
-                  prefixIcon: Icons.lock,
-                  color: Colors.white,
-                  textSize: 15,
-                ),
-              ),
+              _email(context),
+              _password(context),
               SizedBox(height: 30),
             ],
           )),
@@ -78,16 +47,40 @@ class _LoginForm extends StatelessWidget {
 }
 
 class _LoginBtn extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
+    final loginForm = Provider.of<LoginService>(context, listen: false);
     return ButtonDecorations.buttonDecoration(
         borderButtonColor: Color.fromRGBO(114, 191, 1, 1),
         buttonColor: Color(0xffEAFDE7),
         textButton: "INICIAR SESIÓN",
         textColor: Colors.white,
         textStrokeColor: Color.fromRGBO(1, 49, 45, 1),
-        function: () {
-          Navigator.pushReplacementNamed(context, 'home');
+        function: () async{
+          if(_formKey.currentState?.validate() == true){
+            Map<String, dynamic> credentials = {
+              'email': loginForm.email,
+              'password': loginForm.password,
+            };
+
+            try{
+              await loginForm.signIn(credentials);
+              Navigator.of(context).pushNamedAndRemoveUntil('home', (route) => false);
+            }catch(error) {
+              showDialog(context: context, builder: (context) {
+                return AlertDialog(
+                  title: Text('Credenciales no válidas'),
+                  content: Text('Las credenciales introducidas son incorrectas'),
+                  actions: <Widget>[
+                    TextButton(onPressed: () {
+                      Navigator.of(context).pop();
+                    }, child: Text('Ok'))
+                  ],
+                );
+              });
+            }
+          }
         });
   }
 }
@@ -155,5 +148,55 @@ Column _LoginBlock(BuildContext context) {
         child: _SignInButton(),
       )
     ],
+  );
+}
+
+TextFormField _email(BuildContext context) {
+  final loginForm = Provider.of<LoginService>(context, listen: false);
+
+  return TextFormField(
+    autocorrect: false,
+    keyboardType: TextInputType.emailAddress,
+    style: const TextStyle(color: Colors.white),
+    decoration: InputDecorations.authInputDecoration(
+      hintText: 'john.doe@gmail.com',
+      labelText: 'EMAIL',
+      prefixIcon: Icons.alternate_email_sharp,
+      color: Colors.white,
+      textSize: 15,
+    ),
+    onChanged: (value) => loginForm.email = value,
+    validator: (value) {
+      String pattern =
+          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+      RegExp regExp = new RegExp(pattern);
+      return regExp.hasMatch(value ?? '') ? null : 'Introduce un email valido';
+    },
+  );
+}
+
+TextFormField _password(BuildContext context) {
+  final loginForm = Provider.of<LoginService>(context, listen: false);
+
+  return TextFormField(
+    autocorrect: false,
+    keyboardType: TextInputType.visiblePassword,
+    obscureText: true,
+    style: const TextStyle(color: Colors.white),
+    decoration: InputDecorations.authInputDecoration(
+      hintText: 'Contraseña',
+      labelText: 'CONTRASEÑA',
+      prefixIcon: Icons.lock,
+      color: Colors.white,
+      textSize: 15,
+    ),
+    onChanged: (value) => loginForm.password = value,
+    autovalidateMode: AutovalidateMode.onUserInteraction,
+    validator: (value) {
+      if (value == null || value.length < 6) {
+        return 'La contraseña debe contener al menos 6 caracteres';
+      }
+      return null;
+    },
   );
 }

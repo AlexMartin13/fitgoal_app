@@ -9,7 +9,13 @@ class ButtonDecorations {
     required Color borderButtonColor,
     required Color buttonColor,
     required VoidCallback function,
+    double? textSize,
+    double? buttonHorizontalPadding,
+    double? buttonVerticalPadding
   }) {
+    textSize ??= 15;
+    buttonHorizontalPadding ??= 60;
+    buttonVerticalPadding ??= 15;
     return MaterialButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
@@ -22,10 +28,10 @@ class ButtonDecorations {
         color: buttonColor,
         onPressed: function,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+          padding: EdgeInsets.symmetric(horizontal: buttonHorizontalPadding, vertical: buttonVerticalPadding),
           child: StrokeText(
             text: textButton,
-            textStyle: TextStyle(color: textColor, fontSize: 15),
+            textStyle: TextStyle(color: textColor, fontSize: textSize),
             strokeColor: textStrokeColor,
             strokeWidth: 5,
           ),
