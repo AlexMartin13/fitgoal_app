@@ -16,13 +16,22 @@ class LoginService extends ChangeNotifier {
 
   bool isLoadingForgotPassword = false;
 
-  signIn(Map<String, dynamic> data) async {
+Future<bool> signIn(Map<String, dynamic> data) async {
+  try {
     final jsonData = await FitGoalProvider.postJsonData('/api/auth/signin/user', data);
-    print('jsonData');
+    print(jsonData);
     user = LoggedUser.fromJson(json.decode(jsonData));
-    FitGoalProvider.apiKey = '${user.type} ${user.token}';
-    notifyListeners();
+    if (user.token.isNotEmpty) { 
+      FitGoalProvider.apiKey = '${user.type} ${user.token}';
+      notifyListeners();
+      return true;
+    }
+    return false;
+  } catch (e) {
+    print(e); 
+    return false;
   }
+}
 
   bool isValidForm() {
     print('$email - $password');
