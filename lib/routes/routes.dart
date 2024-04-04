@@ -5,7 +5,8 @@ Map<String, WidgetBuilder> getApplicationRoutes() {
   return <String, WidgetBuilder>{
     '/': (BuildContext context) => LoginScreen(),
     'home': (BuildContext context) => BottomNavigation(),
-    'register': (BuildContext context) => SignInScreen(),
-    'recover': (BuildContext context) => ForgotPassword()
+    'register': (BuildContext context) => SignUpScreen(),
+    'recover': (BuildContext context) => ForgotPassword(),
+    'exercises': (BuildContext context) => ExercisesScreen(),
   };
 }

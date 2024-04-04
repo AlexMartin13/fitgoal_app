@@ -24,7 +24,7 @@ class FitGoalProvider extends ChangeNotifier {
     };
     String jsonData = json.encode(data);
 
-      final response = await http.post( Uri.http(_baseUrl, endpoint), headers: headers, body: jsonData);
+      final response = await http.post( url, headers: headers, body: jsonData);
 
       if (response.statusCode == 200) {
         print('Solicitud exitosa');

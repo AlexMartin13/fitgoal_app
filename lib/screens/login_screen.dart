@@ -6,7 +6,6 @@ import 'package:fitgoal_app/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-  final _formKey = GlobalKey<FormState>();
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -15,7 +14,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
+  final _formKey = GlobalKey<FormState>();
+  final loginService = new LoginService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,68 +26,66 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-}
 
-class _LoginForm extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
+  Widget _LoginForm() {
     return Container(
       child: Form(
-        key: _formKey,
+          key: _formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             children: [
-              _email(context),
-              _password(context),
+              _email(),
+              _password(),
               SizedBox(height: 30),
             ],
           )),
     );
   }
-}
 
-class _LoginBtn extends StatelessWidget {
-  
-  @override
-  Widget build(BuildContext context) {
-    final loginForm = Provider.of<LoginService>(context, listen: false);
+  Widget _LoginBtn() {
     return ButtonDecorations.buttonDecoration(
         borderButtonColor: Color.fromRGBO(114, 191, 1, 1),
         buttonColor: Color(0xffEAFDE7),
         textButton: "INICIAR SESIÓN",
         textColor: Colors.white,
         textStrokeColor: Color.fromRGBO(1, 49, 45, 1),
-        function: () async{
-          if(_formKey.currentState?.validate() == true){
+        function: () async {
+          if (_formKey.currentState?.validate() == true) {
             Map<String, dynamic> credentials = {
-              'email': loginForm.email,
-              'password': loginForm.password,
+              'email': loginService.email,
+              'password': loginService.password,
             };
 
-            try{
-              await loginForm.signIn(credentials);
-              Navigator.of(context).pushNamedAndRemoveUntil('home', (route) => false);
-            }catch(error) {
-              showDialog(context: context, builder: (context) {
-                return AlertDialog(
-                  title: Text('Credenciales no válidas'),
-                  content: Text('Las credenciales introducidas son incorrectas'),
-                  actions: <Widget>[
-                    TextButton(onPressed: () {
-                      Navigator.of(context).pop();
-                    }, child: Text('Ok'))
-                  ],
-                );
-              });
+            try {
+              await loginService.signIn(credentials);
+              if (!mounted) return; // Agrega esta línea
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil('home', (route) => false);
+            } catch (error) {
+              if (!mounted) return; // Agrega esta línea
+              print("error: $error");
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text('Credenciales no válidas'),
+                      content:
+                          Text('Las credenciales introducidas son incorrectas'),
+                      actions: <Widget>[
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('Ok'))
+                      ],
+                    );
+                  });
             }
           }
         });
   }
-}
 
-class _SignInButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
+  Widget _SignInButton() {
     return ButtonDecorations.buttonDecoration(
         borderButtonColor: Color.fromRGBO(114, 191, 1, 1),
         buttonColor: Color(0xffEAFDE7),
@@ -98,105 +96,103 @@ class _SignInButton extends StatelessWidget {
           Navigator.pushReplacementNamed(context, 'register');
         });
   }
-}
 
-TextButton _ForgotPass(BuildContext context) {
-  return TextButton(
-      onPressed: () {
-        Navigator.pushNamed(context, 'recover');
-      },
-      child: Text(
-        "¿HAS OLVIDADO TU CONTRASEÑA?",
-        style: TextStyle(
-          color: Colors.white,
-        ),
-      ));
-}
+  TextButton _ForgotPass(BuildContext context) {
+    return TextButton(
+        onPressed: () {
+          Navigator.pushNamed(context, 'recover');
+        },
+        child: Text(
+          "¿HAS OLVIDADO TU CONTRASEÑA?",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ));
+  }
 
-Column _LoginBlock(BuildContext context) {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Center(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 50),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25),
-              border: Border.all(
-                  color: const Color.fromRGBO(114, 191, 1, 1), width: 1.5),
-            ),
+  Column _LoginBlock(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 50),
             child: Container(
-              width: 310,
-              height: 350,
-              child: Column(
-                children: [
-                  const SizedBox(height: 30),
-                  _LoginForm(),
-                  const SizedBox(height: 20),
-                  _LoginBtn(),
-                  const SizedBox(height: 10),
-                  _ForgotPass(context)
-                ],
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                border: Border.all(
+                    color: const Color.fromRGBO(114, 191, 1, 1), width: 1.5),
+              ),
+              child: Container(
+                width: 310,
+                height: 380,
+                child: Column(
+                  children: [
+                    const SizedBox(height: 30),
+                    _LoginForm(),
+                    const SizedBox(height: 20),
+                    _LoginBtn(),
+                    const SizedBox(height: 10),
+                    _ForgotPass(context)
+                  ],
+                ),
               ),
             ),
           ),
         ),
+        Padding(
+          padding: EdgeInsets.only(top: 30),
+          child: _SignInButton(),
+        )
+      ],
+    );
+  }
+
+  TextFormField _email() {
+    return TextFormField(
+      autocorrect: false,
+      keyboardType: TextInputType.emailAddress,
+      style: const TextStyle(color: Colors.white),
+      decoration: InputDecorations.authInputDecoration(
+        hintText: 'john.doe@gmail.com',
+        labelText: 'EMAIL',
+        prefixIcon: Icons.alternate_email_sharp,
+        color: Colors.white,
+        textSize: 15,
       ),
-      Padding(
-        padding: EdgeInsets.only(top: 30),
-        child: _SignInButton(),
-      )
-    ],
-  );
-}
+      onChanged: (value) => loginService.email = value,
+      validator: (value) {
+        String pattern =
+            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+        RegExp regExp = new RegExp(pattern);
+        return regExp.hasMatch(value ?? '')
+            ? null
+            : 'Introduce un email valido';
+      },
+    );
+  }
 
-TextFormField _email(BuildContext context) {
-  final loginForm = Provider.of<LoginService>(context, listen: false);
-
-  return TextFormField(
-    autocorrect: false,
-    keyboardType: TextInputType.emailAddress,
-    style: const TextStyle(color: Colors.white),
-    decoration: InputDecorations.authInputDecoration(
-      hintText: 'john.doe@gmail.com',
-      labelText: 'EMAIL',
-      prefixIcon: Icons.alternate_email_sharp,
-      color: Colors.white,
-      textSize: 15,
-    ),
-    onChanged: (value) => loginForm.email = value,
-    validator: (value) {
-      String pattern =
-          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-      RegExp regExp = new RegExp(pattern);
-      return regExp.hasMatch(value ?? '') ? null : 'Introduce un email valido';
-    },
-  );
-}
-
-TextFormField _password(BuildContext context) {
-  final loginForm = Provider.of<LoginService>(context, listen: false);
-
-  return TextFormField(
-    autocorrect: false,
-    keyboardType: TextInputType.visiblePassword,
-    obscureText: true,
-    style: const TextStyle(color: Colors.white),
-    decoration: InputDecorations.authInputDecoration(
-      hintText: 'Contraseña',
-      labelText: 'CONTRASEÑA',
-      prefixIcon: Icons.lock,
-      color: Colors.white,
-      textSize: 15,
-    ),
-    onChanged: (value) => loginForm.password = value,
-    autovalidateMode: AutovalidateMode.onUserInteraction,
-    validator: (value) {
-      if (value == null || value.length < 6) {
-        return 'La contraseña debe contener al menos 6 caracteres';
-      }
-      return null;
-    },
-  );
+  TextFormField _password() {
+    return TextFormField(
+      autocorrect: false,
+      keyboardType: TextInputType.visiblePassword,
+      obscureText: true,
+      style: const TextStyle(color: Colors.white),
+      decoration: InputDecorations.authInputDecoration(
+        hintText: 'Contraseña',
+        labelText: 'CONTRASEÑA',
+        prefixIcon: Icons.lock,
+        color: Colors.white,
+        textSize: 15,
+      ),
+      onChanged: (value) => loginService.password = value,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: (value) {
+        if (value == null || value.length < 6) {
+          return 'La contraseña debe contener al menos 6 caracteres';
+        }
+        return null;
+      },
+    );
+  }
 }

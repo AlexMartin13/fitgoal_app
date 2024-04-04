@@ -46,7 +46,7 @@ class LoggedUser {
         type: json["type"],
         id: json["id"],
         name: json["name"],
-        surname: json["surname"],
+        surname: json["surnames"],
         email: json["email"],
         password: json["password"],
         team: json["team"],

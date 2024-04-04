@@ -1,3 +1,4 @@
+import 'package:fitgoal_app/screens/screens.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/widgets.dart';
@@ -13,12 +14,8 @@ class BottomNavigation extends StatefulWidget {
 
 class _BottomNavigationState extends State<BottomNavigation> {
   final List<Widget> _pages = [
-    Container(
-      color: const Color.fromRGBO(1, 49, 45, 1),
-    ),
-    Container(
-      color: const Color.fromRGBO(1, 49, 45, 1),
-    ),
+    ExerciseMenu(),
+    CoachMenu(),
   ];
 
   @override
@@ -45,14 +42,27 @@ BottomNavigationBarItem _bottomItem(int index) {
   return BottomNavigationBarItem(
     icon: Transform.scale(
       scale: 1,
-      child: index == 0
+      child: _selectedIndex == 0 ?
+      index == 0
+          ? Image.asset(
+              "assets/png_icons/exercise_icon_activated.png",
+              width: 40,
+              height: 40,
+            )
+          : Image.asset(
+              "assets/png_icons/team_icon.png",
+              width: 40,
+              height: 40,
+            )
+            :
+            index == 0
           ? Image.asset(
               "assets/png_icons/exercise_icon.png",
               width: 40,
               height: 40,
             )
           : Image.asset(
-              "assets/png_icons/team_icon.png",
+              "assets/png_icons/team_icon_activated.png",
               width: 40,
               height: 40,
             ),

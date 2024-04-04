@@ -1,15 +1,14 @@
-import 'package:fitgoal_app/services/login_service.dart';
 import 'package:fitgoal_app/ui/button_decoration.dart';
 import 'package:flutter/material.dart';
 
-class ExerciseMenu extends StatefulWidget {
-  const ExerciseMenu({super.key});
+class CoachMenu extends StatefulWidget {
+  const CoachMenu({super.key});
 
   @override
-  State<ExerciseMenu> createState() => _ExerciseMenuState();
+  State<CoachMenu> createState() => _CoachMenuState();
 }
 
-class _ExerciseMenuState extends State<ExerciseMenu> {
+class _CoachMenuState extends State<CoachMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,55 +17,51 @@ class _ExerciseMenuState extends State<ExerciseMenu> {
         child: Column(
           children: [
             SizedBox(height: 80),
-            _mySessionsBtn(),
+            _playersBtn(),
             SizedBox(height: 120),
-            _exercisesBtn(),
+            _lineUpBtn(),
             SizedBox(height: 120),
-            _chronoBtn(),
+            _boardBtn(),
           ],
         ),
       ),
     );
   }
 
-  Widget _mySessionsBtn() {
+  Widget _playersBtn() {
     return ButtonDecorations.buttonDecoration(
-        textButton: 'MIS SESIONES',
+        textButton: 'JUGADORES',
         textColor: Colors.white,
         textStrokeColor: Color.fromRGBO(1, 49, 45, 1),
         borderButtonColor: Color.fromRGBO(114, 191, 1, 1),
         buttonColor: Color(0xffEAFDE7),
-        buttonHorizontalPadding: 80,
+        buttonHorizontalPadding: 90,
         buttonVerticalPadding: 20,
         textSize: 20,
-        function: () {
-          print(LoginService.token);
-        });
+        function: () {});
   }
 
-  Widget _exercisesBtn() {
-    return ButtonDecorations.buttonDecoration(
-        textButton: 'EJERCICIOS',
+  Widget _lineUpBtn() {
+        return ButtonDecorations.buttonDecoration(
+        textButton: 'ALINEACIÓN',
         textColor: Colors.white,
         textStrokeColor: Color.fromRGBO(1, 49, 45, 1),
         borderButtonColor: Color.fromRGBO(114, 191, 1, 1),
         buttonColor: Color(0xffEAFDE7),
-        buttonHorizontalPadding: 93,
+        buttonHorizontalPadding: 90,
         buttonVerticalPadding: 20,
         textSize: 20,
-        function: () {
-          Navigator.pushNamed(context, 'exercises');
-        });
+        function: () {});
   }
 
-  Widget _chronoBtn() {
-    return ButtonDecorations.buttonDecoration(
-        textButton: 'CRONÓMETRO',
+    Widget _boardBtn() {
+        return ButtonDecorations.buttonDecoration(
+        textButton: 'PIZARRA',
         textColor: Colors.white,
         textStrokeColor: Color.fromRGBO(1, 49, 45, 1),
         borderButtonColor: Color.fromRGBO(114, 191, 1, 1),
         buttonColor: Color(0xffEAFDE7),
-        buttonHorizontalPadding: 79,
+        buttonHorizontalPadding: 105,
         buttonVerticalPadding: 20,
         textSize: 20,
         function: () {});
