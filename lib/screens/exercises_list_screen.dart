@@ -1,6 +1,7 @@
 import 'package:fitgoal_app/services/exercice_service.dart';
 import 'package:fitgoal_app/services/login_service.dart';
 import 'package:fitgoal_app/services/tag_service.dart';
+import 'package:fitgoal_app/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_randomcolor/flutter_randomcolor.dart';
 import 'package:provider/provider.dart';
@@ -26,21 +27,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   Widget build(BuildContext context) {
     final exerciceService = Provider.of<ExerciceService>(context);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(114, 191, 1, 1),
-        leading: GestureDetector(
-          child: const Padding(
-            padding: EdgeInsets.only(left: 10),
-            child: ImageIcon(
-              AssetImage('assets/png_icons/back_arrow.png'),
-              color: Colors.white,
-            ),
-          ),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+      appBar: reducedAppBar(context),
       backgroundColor: const Color.fromRGBO(1, 49, 45, 1),
       body: ListView.builder(
         itemCount: exerciceService.exercices.length,
