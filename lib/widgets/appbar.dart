@@ -18,3 +18,21 @@ AppBar appBarFitGoalComplete() {
     ),
   );
 }
+
+AppBar reducedAppBar(BuildContext context) {
+  return AppBar(
+        backgroundColor: const Color.fromRGBO(114, 191, 1, 1),
+        leading: GestureDetector(
+          child: const Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: ImageIcon(
+              AssetImage('assets/png_icons/back_arrow.png'),
+              color: Colors.white,
+            ),
+          ),
+          onTap: () {
+            Navigator.pop(context);
+          },
+        ),
+      );
+}

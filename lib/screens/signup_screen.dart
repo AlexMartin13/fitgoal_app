@@ -2,6 +2,7 @@ import 'package:fitgoal_app/services/login_service.dart';
 import 'package:fitgoal_app/services/user_service.dart';
 import 'package:fitgoal_app/ui/button_decoration.dart';
 import 'package:fitgoal_app/ui/input_decoration.dart';
+import 'package:fitgoal_app/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -23,21 +24,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(114, 191, 1, 1),
-        leading: GestureDetector(
-          child: const Padding(
-            padding: EdgeInsets.only(left: 10),
-            child: ImageIcon(
-              AssetImage('assets/png_icons/back_arrow.png'),
-              color: Colors.white,
-            ),
-          ),
-          onTap: () {
-            Navigator.popAndPushNamed(context, '/');
-          },
-        ),
-      ),
+      appBar: reducedAppBar(context),
       backgroundColor: const Color.fromRGBO(1, 49, 45, 1),
       body: SingleChildScrollView(
         child: _SignInBlock(),
