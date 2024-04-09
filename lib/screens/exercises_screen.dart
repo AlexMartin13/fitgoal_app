@@ -18,7 +18,6 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   @override
   void initState() {
     super.initState();
-    // Obtener ejercicios al iniciar la pantalla
     Provider.of<ExerciceService>(context, listen: false).getExercices();
   }
 
@@ -60,6 +59,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
         height: 143,
+        width: double.infinity,
         decoration: BoxDecoration(
           border: Border.all(
             width: 2,
@@ -84,7 +84,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                   Row(
                     children: [
                       Container(
-                        width: 180,
+                        width: 160,
                         child: Text(
                           exercice.name,
                           overflow: TextOverflow.ellipsis,
@@ -123,7 +123,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                   SizedBox(height: 10),
                   Center(
                     child: Container(
-                      width: 240,
+                      width: 200,
                       height: 60,
                       child: ListView(
                         scrollDirection: Axis.horizontal,

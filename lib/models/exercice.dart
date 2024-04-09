@@ -6,7 +6,7 @@ class Exercice {
   int id;
   String name;
   String description;
-  String video;
+  String? video;
   String image;
   List<Tag> tags;
 
@@ -14,7 +14,7 @@ class Exercice {
     required this.id,
     required this.name,
     required this.description,
-    required this.video,
+    this.video,
     required this.image,
     required this.tags,
   });
