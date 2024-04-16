@@ -1,11 +1,8 @@
 import 'package:fitgoal_app/services/exercice_service.dart';
 import 'package:fitgoal_app/services/login_service.dart';
-import 'package:fitgoal_app/services/tag_service.dart';
 import 'package:fitgoal_app/widgets/appbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_randomcolor/flutter_randomcolor.dart';
 import 'package:provider/provider.dart';
-import 'package:stroke_text/stroke_text.dart';
 import '../models/models.dart';
 
 class ExercisesScreen extends StatefulWidget {
@@ -41,12 +38,11 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   Widget _buildExerciceItem(Exercice exercice) {
     return GestureDetector(
       onTap: () {
-        // TODO: Handle onTap
+        Navigator.pushNamed(context, 'exercice', arguments: exercice);
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-        height: 143,
-        width: double.infinity,
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           border: Border.all(
             width: 2,
@@ -54,70 +50,61 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
           ),
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FadeInImage.assetNetwork(
-              placeholder: 'assets/gif/loading.gif',
-              image: exercice.image,
-              fit: BoxFit.cover,
+            SizedBox(
               width: 100,
               height: 100,
+              child: FadeInImage.assetNetwork(
+                placeholder: 'assets/gif/loading.gif',
+                image: exercice.image,
+                fit: BoxFit.cover,
+              ),
             ),
             const SizedBox(width: 20),
-            Padding(
-              padding: EdgeInsets.only(top: 20),
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        width: 160,
+                      Flexible(
                         child: Text(
                           exercice.name,
-                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                              color: Colors.white, fontSize: 20),
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      Container(
-                          width: 40,
-                          child: PopupMenuButton<String>(
-                            icon: Icon(Icons.more_horiz),
-                            iconColor: Colors.white,
-                            itemBuilder: (BuildContext context) =>
-                                <PopupMenuEntry<String>>[
-                              PopupMenuItem<String>(
-                                value: 'Añadir a lista',
-                                child: Text('Añadir a lista'),
-                              ),
-                              PopupMenuItem<String>(
-                                value: 'Editar',
-                                child: Text('Editar'),
-                              ),
-                            ],
-                            onSelected: (String value) {
-                              // Aquí puedes manejar la selección de la opción del menú
-                              print(LoginService.user);
-                            },
-                          ))
-                      /*IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.more_horiz),
-                          color: Colors.white,
-                        ), */
+                      PopupMenuButton<String>(
+                        icon: Icon(Icons.more_horiz, color: Colors.white),
+                        itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                          const PopupMenuItem<String>(
+                            value: 'Añadir a lista',
+                            child: Text('Añadir a lista'),
+                          ),
+                          const PopupMenuItem<String>(
+                            value: 'Editar',
+                            child: Text('Editar'),
+                          ),
+                        ],
+                        onSelected: (String value) {
+                          // Handle menu item selection here
+                        },
+                      ),
                     ],
                   ),
-                  SizedBox(height: 10),
-                  Center(
-                    child: Container(
-                      width: 200,
-                      height: 60,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: [_buildTagScroll(exercice.tags)],
-                      ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 35,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: _buildTagWidgets(exercice.tags),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -127,29 +114,25 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
     );
   }
 
-  Widget _buildTagScroll(List<Tag> tags) {
-    return Wrap(
-      spacing: 8.0,
-      runSpacing: 8.0,
-      children: tags.map((tag) {
-        return Padding(
-          padding: const EdgeInsets.only(right: 8.0),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(25),
-            child: Container(
-              color: Colors.orange,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text(
-                tag.name,
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.white,
-                ),
+  List<Widget> _buildTagWidgets(List<Tag> tags) {
+    return tags.map((tag) {
+      return Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(25),
+          child: Container(
+            color: Colors.orange,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            child: Text(
+              tag.name,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.white,
               ),
             ),
           ),
-        );
-      }).toList(),
-    );
+        ),
+      );
+    }).toList();
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class Tag {
   int id;
   String name;

@@ -14,16 +14,18 @@ class _ExerciseMenuState extends State<ExerciseMenu> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(1, 49, 45, 1),
-      body: Center(
-        child: Column(
-          children: [
-            SizedBox(height: 80),
-            _mySessionsBtn(),
-            SizedBox(height: 120),
-            _exercisesBtn(),
-            SizedBox(height: 120),
-            _chronoBtn(),
-          ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              SizedBox(height: 80),
+              _mySessionsBtn(),
+              SizedBox(height: 120),
+              _exercisesBtn(),
+              SizedBox(height: 120),
+              _chronoBtn(),
+            ],
+          ),
         ),
       ),
     );
@@ -55,7 +57,7 @@ class _ExerciseMenuState extends State<ExerciseMenu> {
         buttonVerticalPadding: 20,
         textSize: 20,
         function: () {
-          Navigator.pushNamed(context, 'exercises');
+          Navigator.pushNamed(context, 'exercices');
         });
   }
 

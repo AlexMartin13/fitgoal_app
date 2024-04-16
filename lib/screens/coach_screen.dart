@@ -13,7 +13,8 @@ class _CoachMenuState extends State<CoachMenu> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(1, 49, 45, 1),
-      body: Center(
+      body: SingleChildScrollView(
+        child: Center(
         child: Column(
           children: [
             SizedBox(height: 80),
@@ -25,6 +26,7 @@ class _CoachMenuState extends State<CoachMenu> {
           ],
         ),
       ),
+      )
     );
   }
 
