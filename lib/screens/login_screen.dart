@@ -58,11 +58,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
             try {
               await loginService.signIn(credentials);
-              if (!mounted) return; // Agrega esta línea
+              if (!mounted) return;
               Navigator.of(context)
                   .pushNamedAndRemoveUntil('home', (route) => false);
             } catch (error) {
-              if (!mounted) return; // Agrega esta línea
+              if (!mounted) return;
               print("error: $error");
               showDialog(
                   context: context,
@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
         textColor: Colors.white,
         textStrokeColor: Color.fromRGBO(1, 49, 45, 1),
         function: () {
-          Navigator.pushReplacementNamed(context, 'register');
+          Navigator.pushNamed(context, 'register');
         });
   }
 

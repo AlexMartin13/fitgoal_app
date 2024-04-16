@@ -1,4 +1,4 @@
-import 'package:fitgoal_app/screens/exercice_info_screen.dart';
+
 import 'package:fitgoal_app/screens/screens.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +9,7 @@ Map<String, WidgetBuilder> getApplicationRoutes() {
     'register': (BuildContext context) => SignUpScreen(),
     'recover': (BuildContext context) => ForgotPassword(),
     'exercices': (BuildContext context) => ExercisesScreen(),
-    'exercice': (BuildContext context) => ExerciceInfo()
+    'exercice': (BuildContext context) => ExerciceInfo(),
+    'sessions': (BuildContext context) => SessionsScreen(),
   };
 }
