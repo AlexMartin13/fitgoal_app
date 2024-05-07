@@ -11,5 +11,6 @@ Map<String, WidgetBuilder> getApplicationRoutes() {
     'exercices': (BuildContext context) => ExercisesScreen(),
     'exercice': (BuildContext context) => ExerciceInfo(),
     'sessions': (BuildContext context) => SessionsScreen(),
+    'session': (BuildContext context) => SessionExerciceScreen(),
   };
 }

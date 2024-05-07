@@ -41,6 +41,7 @@ dependencies:
   provider: ^6.1.2
   flutter_randomcolor: ^1.0.15
   carousel_slider: ^4.2.1
+  async: ^2.11.0
 
 dev_dependencies:
   flutter_test:

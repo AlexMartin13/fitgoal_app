@@ -1,6 +1,7 @@
 import 'package:fitgoal_app/routes/routes.dart';
 import 'package:fitgoal_app/services/exercice_service.dart';
 import 'package:fitgoal_app/services/login_service.dart';
+import 'package:fitgoal_app/services/session_service.dart';
 import 'package:fitgoal_app/services/tag_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,9 @@ class FitGoal extends StatelessWidget {
           ),
           ChangeNotifierProvider.value(
             value: TagService(),
+          ),
+          ChangeNotifierProvider.value(
+            value: SessionService(),
           )
         ],
         child: MaterialApp(

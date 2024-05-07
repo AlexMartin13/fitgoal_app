@@ -8,7 +8,8 @@ class Exercice {
   String description;
   String? video;
   String image;
-  List<Tag> tags;
+  List<Tag>? tags;
+  String? addedAt;
 
   Exercice({
     required this.id,
@@ -16,7 +17,8 @@ class Exercice {
     required this.description,
     this.video,
     required this.image,
-    required this.tags,
+    this.tags,
+    this.addedAt
   });
   Exercice.empty()
       : id = 0,
@@ -24,7 +26,8 @@ class Exercice {
         description = '',
         video = '',
         image = '',
-        tags = [];
+        tags = [],
+        addedAt = DateTime.now().toString();
 
   factory Exercice.fromRawJson(String str) =>
       Exercice.fromJson(json.decode(str));
@@ -38,6 +41,7 @@ class Exercice {
         video: json["video"],
         image: json["image"],
         tags: List<Tag>.from(json["tags"].map((x) => Tag.fromJson(x))),
+        addedAt: json["addedAtSession"]
       );
 
   Map<String, dynamic> toJson() => {
@@ -46,7 +50,7 @@ class Exercice {
         "description": description,
         "video": video,
         "image": image,
-        "tags": List<dynamic>.from(tags.map((x) => x.toJson())),
+        "tags": List<dynamic>.from(tags!.map((x) => x.toJson())),
       };
 
   @override

@@ -1,40 +1,46 @@
 import 'package:fitgoal_app/services/exercice_service.dart';
-import 'package:fitgoal_app/services/login_service.dart';
-import 'package:fitgoal_app/services/session_service.dart';
 import 'package:fitgoal_app/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/models.dart';
 
-class ExercisesScreen extends StatefulWidget {
-  const ExercisesScreen({Key? key}) : super(key: key);
-  
+class SessionExerciceScreen extends StatefulWidget {
+  const SessionExerciceScreen({Key? key}) : super(key: key);
 
   @override
-  State<ExercisesScreen> createState() => _ExercisesScreenState();
+  State<SessionExerciceScreen> createState() => _SessionExerciceScreenState();
 }
 
-class _ExercisesScreenState extends State<ExercisesScreen> {
-  Session? selectedSession;
-  String data = 'Select a session';
-  ExerciceService exerciceService = ExerciceService();
+class _SessionExerciceScreenState extends State<SessionExerciceScreen> {
+  ExerciceService? exerciceService;
+  List<Exercice> exercices = [];
+  Session? session;
+
   @override
   void initState() {
     super.initState();
-    Provider.of<ExerciceService>(context, listen: false).getExercices();
-    Provider.of<SessionService>(context, listen: false).getSessions();
+    Future.microtask(() {
+      if (ModalRoute.of(context)!.settings.arguments is Session) {
+        session = ModalRoute.of(context)!.settings.arguments as Session;
+        exerciceService = Provider.of<ExerciceService>(context, listen: false);
+        exerciceService!.getExercicesFromSession(session!.id).then((_) {
+          setState(() {
+            exercices = exerciceService!.exercicesInSession;
+          });
+        });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    exerciceService = Provider.of<ExerciceService>(context);
     return Scaffold(
       appBar: reducedAppBar(context),
       backgroundColor: const Color.fromRGBO(1, 49, 45, 1),
       body: ListView.builder(
-        itemCount: exerciceService.exercices.length,
+        itemCount: exercices.length,
         itemBuilder: (context, index) {
-          final exercice = exerciceService.exercices[index];
+          final exercice = exercices[index];
           return _buildExerciceItem(exercice);
         },
       ),
@@ -81,21 +87,17 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 20,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       PopupMenuButton<String>(
-                        icon: Icon(Icons.more_horiz, color: Colors.white),
+                        icon: const Icon(Icons.more_horiz, color: Colors.white),
                         onSelected: (value) => handlePopupMenuSelected(value, exercice),
-                        itemBuilder: (BuildContext context) => [
+                        itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                           const PopupMenuItem<String>(
-                            value: 'add_to_list',
-                            child: Text('Añadir a lista'),
-                          ),
-                          const PopupMenuItem<String>(
-                            value: 'edit',
-                            child: Text('Editar'),
+                            value: 'remove',
+                            child: Text('Eliminar de la sesión'),
                           ),
                         ],
                       ),
@@ -121,68 +123,41 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   void handlePopupMenuSelected(String value, Exercice exercice) {
     switch (value) {
       case 'add_to_list':
-        showDialogToAddSession(exercice);
+      //TODO: Implement add to list
         break;
-      case 'edit':
-        // Navigate to edit page or do edit functionality
+      case 'remove':
+        showDialogToDeleteExerciceInSession(exercice);
         break;
     }
   }
 
-void showDialogToAddSession(Exercice exercice) {
+void showDialogToDeleteExerciceInSession(Exercice exercice) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      return StatefulBuilder(
-        builder: (context, setState) {
-          return AlertDialog(
-            title: Text("Select Session"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                DropdownButton<Session>(
-                  isExpanded: true,
-                  value: selectedSession,
-                  onChanged: (Session? newValue) {
-                    setState(() {
-                      selectedSession = newValue;
-                    });
-                  },
-                  items: Provider.of<SessionService>(context, listen: false)
-                      .sessions
-                      .map<DropdownMenuItem<Session>>((Session session) {
-                    return DropdownMenuItem<Session>(
-                      value: session,
-                      child: Text(session.name),
-                    );
-                  }).toList(),
-                ),
-                if (selectedSession != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      'Session: ${selectedSession!.name}',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  exerciceService.addExerciceIntoSession(exercice, selectedSession!);
-                  Navigator.of(context).pop();
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
+      return AlertDialog(
+        title: const Text("Eliminar ejercicio de la sesión"),
+        content: Text("¿Estás seguro de que deseas eliminar este ejercicio de la sesión?"),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("Cancelar"),
+          ),
+          TextButton(
+            onPressed: () {
+              exerciceService?.removeExerciceFromSession(exercice, session!);
+              exerciceService?.getExercicesFromSession(session!.id).then((_) {
+                setState(() {
+                  exercices = exerciceService!.exercicesInSession;
+                });
+              });
+              Navigator.of(context).pop(); // Cierra el diálogo
+            },
+            child: const Text("Eliminar"),
+          ),
+        ],
       );
     },
   );
@@ -190,7 +165,7 @@ void showDialogToAddSession(Exercice exercice) {
 
 
   List<Widget> _buildTagWidgets(List<Tag> tags) {
-    return tags.map((tag) {
+    return tags.map((Tag tag) {
       return Padding(
         padding: const EdgeInsets.only(right: 8.0),
         child: ClipRRect(
