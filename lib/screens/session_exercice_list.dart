@@ -144,6 +144,9 @@ void showDialogToDeleteExerciceInSession(Exercice exercice) {
               Navigator.of(context).pop();
             },
             child: const Text("Cancelar"),
+
+
+            
           ),
           TextButton(
             onPressed: () {

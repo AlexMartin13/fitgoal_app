@@ -12,6 +12,7 @@ import '../models/models.dart';
 class SessionService extends ChangeNotifier {
   List<Session> sessions = [];
   Session session = Session.empty();
+  Session newSession = Session.empty();
 
   final debouncer = Debouncer(duration: Duration(milliseconds: 500));
   final StreamController<List<Session>> _suggestionStreamController = StreamController.broadcast();
@@ -34,5 +35,16 @@ class SessionService extends ChangeNotifier {
       notifyListeners();
     }
   }
-  
+
+  Future<void> createSession(Map<String, dynamic> data) async {
+    final user = LoginService.user;
+    FitGoalProvider.apiKey = '${user.type} ${user.token}';
+    print(FitGoalProvider.apiKey);
+
+    if(user != null){
+      final jsonData = await FitGoalProvider.postJsonData('session/${user.id}', data);
+      newSession = Session.fromRawJson(jsonData);
+      notifyListeners();
+    }
+  }
 }

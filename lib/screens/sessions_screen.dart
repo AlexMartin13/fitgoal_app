@@ -1,6 +1,5 @@
 import 'package:fitgoal_app/models/session.dart';
 import 'package:fitgoal_app/services/session_service.dart';
-import 'package:fitgoal_app/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,16 +11,87 @@ class SessionsScreen extends StatefulWidget {
 }
 
 class _SessionsScreenState extends State<SessionsScreen> {
-    @override
+  TextEditingController _sessionNameController = TextEditingController();
+
+  @override
   void initState() {
     super.initState();
     Provider.of<SessionService>(context, listen: false).getSessions();
   }
+
+  @override
+  void dispose() {
+    _sessionNameController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final sessionService = Provider.of<SessionService>(context);
     return Scaffold(
-      appBar: reducedAppBar(context),
+      appBar: AppBar(
+        backgroundColor: const Color.fromRGBO(114, 191, 1, 1),
+        leading: GestureDetector(
+          child: const Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: ImageIcon(
+              AssetImage('assets/png_icons/back_arrow.png'),
+              color: Colors.white,
+            ),
+          ),
+          onTap: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.add, size: 30, color: Colors.white),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Añadir Sesión'),
+                  content: SingleChildScrollView(
+                    child: ListBody(
+                      children: <Widget>[
+                        TextField(
+                          controller: _sessionNameController,
+                          decoration: const InputDecoration(
+                            labelText: 'Nombre de la Sesión',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Cancelar'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        if (_sessionNameController.text.isNotEmpty) {
+                          sessionService.createSession({
+                            'name': _sessionNameController.text,
+                          });
+                          Navigator.pop(context);
+                          _sessionNameController.clear();
+                          sessionService.getSessions().then((_) => setState(() => {
+                            sessionService.getSessions() //hacer lo de exercice session screen
+                          }));
+                        }
+                      },
+                      child: const Text('Añadir'),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       backgroundColor: const Color.fromRGBO(1, 49, 45, 1),
       body: ListView.builder(
         itemCount: sessionService.sessions.length,
@@ -33,10 +103,9 @@ class _SessionsScreenState extends State<SessionsScreen> {
     );
   }
 
-    Widget _buildSessionItem(Session session) {
+  Widget _buildSessionItem(Session session) {
     return GestureDetector(
       onTap: () {
-        print("\n\n\nSession Id = ${session.id} \n\n\n");
         Navigator.pushReplacementNamed(context, 'session', arguments: session);
       },
       child: Container(
@@ -65,20 +134,13 @@ class _SessionsScreenState extends State<SessionsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          session.name,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    session.name,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
@@ -88,5 +150,4 @@ class _SessionsScreenState extends State<SessionsScreen> {
       ),
     );
   }
-
 }

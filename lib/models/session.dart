@@ -34,10 +34,7 @@ class Session{
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
         "name": name,
-        "url": url,
-        "allowedUsers": List<dynamic>.from(allowedUsers!.map((x) => x.toJson())),
       };
 
   @override
