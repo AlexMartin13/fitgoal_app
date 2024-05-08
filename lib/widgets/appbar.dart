@@ -19,7 +19,7 @@ AppBar appBarFitGoalComplete() {
   );
 }
 
-AppBar reducedAppBar(BuildContext context) {
+AppBar reducedAppBar(BuildContext context, String previousRoute) {
   return AppBar(
         backgroundColor: const Color.fromRGBO(114, 191, 1, 1),
         leading: GestureDetector(
@@ -31,35 +31,11 @@ AppBar reducedAppBar(BuildContext context) {
             ),
           ),
           onTap: () {
-            Navigator.pop(context);
+            if(previousRoute == 'session') Navigator.pushNamed(context, previousRoute);
+              Navigator.canPop(context) ? Navigator.pop(context) : Navigator.pushNamed(context, previousRoute);
           },
         ),
       );
 }
 
-AppBar reducedAppBarAddSession(BuildContext context) {
-  return AppBar(
-    backgroundColor: const Color.fromRGBO(114, 191, 1, 1),
-    leading: GestureDetector(
-      child: const Padding(
-        padding: EdgeInsets.only(left: 10),
-        child: ImageIcon(
-          AssetImage('assets/png_icons/back_arrow.png'),
-          color: Colors.white,
-        ),
-      ),
-      onTap: () {
-        Navigator.pop(context);
-      },
-    ),
-    actions: <Widget>[
-      IconButton(
-        icon: const Icon(Icons.add, size: 50, color: Colors.white),
-        onPressed: () {
-          // Aquí pones lo que debe hacer el botón "+"
-          // Por ejemplo, abrir un formulario para añadir una sesión
-        },
-      ),
-    ],
-  );
-}
+

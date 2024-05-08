@@ -1,4 +1,5 @@
 import 'package:fitgoal_app/models/models.dart';
+import 'package:fitgoal_app/utils/utils.dart';
 import 'package:fitgoal_app/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -26,7 +27,7 @@ class _ExerciceInfo extends State<ExerciceInfo> {
       _video = '';
     });
     return Scaffold(
-      appBar: reducedAppBar(context),
+      appBar: reducedAppBar(context, 'exercices'),
       backgroundColor: const Color.fromRGBO(1, 49, 45, 1),
       body: Center(
         child: Column(
@@ -96,9 +97,9 @@ class _ExerciceInfo extends State<ExerciceInfo> {
     return CarouselSlider.builder(
         itemCount: 2,
         itemBuilder: (ctx, index, realIdx) {
-          return FadeInImage.assetNetwork(
-            placeholder: 'assets/gif/loading.gif',
-            image: _image,
+          return FadeInImage(
+            placeholder: AssetImage('assets/gif/loading.gif'),
+            image: MemoryImage(utils.dataFromBase64String(_image)),
             fit: BoxFit.cover,
           );
         },

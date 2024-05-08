@@ -7,19 +7,22 @@ class Session{
   String name;
   String url;
   List<User>? allowedUsers;
+  List<Exercice>? exercices;
 
   Session({
     required this.id,
     required this.name,
     required this.url,
     this.allowedUsers,
+    this.exercices,
   });
 
   Session.empty()
       : id = 0,
         name = '',
         url = '',
-        allowedUsers = [];
+        allowedUsers = [],
+        exercices = [];
 
   factory Session.fromRawJson(String str) =>
       Session.fromJson(json.decode(str));
@@ -39,7 +42,7 @@ class Session{
 
   @override
   String toString() {
-    return 'Exercise {'
+    return 'Session {'
         'id: $id, '
         'name: $name, '
         'url: $url, '

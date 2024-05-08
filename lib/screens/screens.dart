@@ -8,3 +8,4 @@ export 'package:fitgoal_app/screens/exercises_list_screen.dart';
 export 'package:fitgoal_app/screens/exercice_info_screen.dart';
 export 'package:fitgoal_app/screens/sessions_screen.dart';
 export 'package:fitgoal_app/screens/session_exercice_list.dart';
+export 'package:fitgoal_app/screens/add_exercice_screen.dart';

@@ -24,7 +24,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: reducedAppBar(context),
+      appBar: reducedAppBar(context, '/'),
       backgroundColor: const Color.fromRGBO(1, 49, 45, 1),
       body: SingleChildScrollView(
         child: _SignInBlock(),
@@ -97,9 +97,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         textColor: Colors.white,
         textStrokeColor: Color.fromRGBO(1, 49, 45, 1),
         function: () async {
-          print('antes');
           if (_formKey.currentState?.validate() == true) {
-            print('entro a funcion');
             if (_password != _confirmPassword) {
               showDialog(
                   context: context,
@@ -125,7 +123,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 "password": _password,
                 "roles": ["ROLE_USER"]
               };
-              print(credentials);
               try {
                 await userService.signUpUser(credentials); //We sign up
                 Map<String, dynamic> credentialsLogin = {
@@ -137,7 +134,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Navigator.of(context)
                   .pushNamedAndRemoveUntil('home', (route) => false);
               } catch (error) {
-                print('Error: $error');
               }
             }
           }

@@ -63,7 +63,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   .pushNamedAndRemoveUntil('home', (route) => false);
             } catch (error) {
               if (!mounted) return;
-              print("error: $error");
               showDialog(
                   context: context,
                   builder: (context) {

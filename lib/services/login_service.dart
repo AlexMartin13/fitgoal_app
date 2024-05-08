@@ -21,19 +21,13 @@ class LoginService extends ChangeNotifier {
 
   signIn(Map<String, dynamic> data) async {
     final jsonData = await FitGoalProvider.postJsonData('api/auth/signin/user', data);
-    print('login');
-    print(jsonData);
     user = LoggedUser.fromJson(json.decode(jsonData));
 
     FitGoalProvider.apiKey = '${user.type} ${user.token}';
-    print(FitGoalProvider.apiKey);
-    print("Este es el usuario creado: $user");
     notifyListeners();
   }
 
   bool isValidForm() {
-    print('$email - $password');
-    print(formKey.currentState?.validate());
     return formKey.currentState?.validate() ?? false;
   }
 }

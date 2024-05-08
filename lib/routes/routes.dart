@@ -10,6 +10,7 @@ Map<String, WidgetBuilder> getApplicationRoutes() {
     'recover': (BuildContext context) => ForgotPassword(),
     'exercices': (BuildContext context) => ExercisesScreen(),
     'exercice': (BuildContext context) => ExerciceInfo(),
+    'add_exercice': (BuildContext context) => AddExerciceScreen(),
     'sessions': (BuildContext context) => SessionsScreen(),
     'session': (BuildContext context) => SessionExerciceScreen(),
   };

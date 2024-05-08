@@ -27,14 +27,12 @@ class ExerciceService extends ChangeNotifier {
     if (exercices.isNotEmpty) exercices.clear();
     final user = LoginService.user;
     FitGoalProvider.apiKey = '${user.type} ${user.token}';
-    print(FitGoalProvider.apiKey);
 
     if (user != null) {
       final jsonData = await FitGoalProvider.getJsonData('exercice');
 
       final List<dynamic> jsonList = json.decode(jsonData);
       exercices = Exercice.fromJsonList(jsonList);
-      print(jsonList);
       notifyListeners();
     }
   }
@@ -43,14 +41,12 @@ class ExerciceService extends ChangeNotifier {
       exercicesInSession = [];
       final user = LoginService.user;
       FitGoalProvider.apiKey = '${user.type} ${user.token}';
-      print(FitGoalProvider.apiKey);
 
       if (user != null) {
         final jsonData =
             await FitGoalProvider.getJsonData('exercice/session/$id');
         final List<dynamic> jsonList = json.decode(jsonData);
         exercicesInSession = Exercice.fromJsonList(jsonList);
-        print('jsonList: $jsonList');
         notifyListeners();
       }
   }
@@ -66,7 +62,16 @@ class ExerciceService extends ChangeNotifier {
         data,
       );
 
-      print(jsonData);
+      notifyListeners();
+    }
+  }
+
+  Future<void> createExercice(Map<String, dynamic> data) async {
+    final user = LoginService.user;
+    FitGoalProvider.apiKey = '${user.type} ${user.token}';
+
+    if (user != null) {
+      await FitGoalProvider.postJsonData('exercice', data);
       notifyListeners();
     }
   }
@@ -82,7 +87,6 @@ class ExerciceService extends ChangeNotifier {
         data,
       );
 
-      print(jsonData);
       notifyListeners();
     }
   }

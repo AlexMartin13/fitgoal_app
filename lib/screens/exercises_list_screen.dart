@@ -1,6 +1,7 @@
 import 'package:fitgoal_app/services/exercice_service.dart';
 import 'package:fitgoal_app/services/login_service.dart';
 import 'package:fitgoal_app/services/session_service.dart';
+import 'package:fitgoal_app/utils/utils.dart';
 import 'package:fitgoal_app/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +30,13 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   Widget build(BuildContext context) {
     exerciceService = Provider.of<ExerciceService>(context);
     return Scaffold(
-      appBar: reducedAppBar(context),
+      appBar: reducedAppBar(context, 'home'),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, 'add_exercice');
+        },
+        child: const Icon(Icons.add),
+      ),
       backgroundColor: const Color.fromRGBO(1, 49, 45, 1),
       body: ListView.builder(
         itemCount: exerciceService.exercices.length,
@@ -61,9 +68,9 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
             SizedBox(
               width: 100,
               height: 100,
-              child: FadeInImage.assetNetwork(
-                placeholder: 'assets/gif/loading.gif',
-                image: exercice.image,
+              child: FadeInImage(
+                placeholder: AssetImage('assets/gif/loading.gif'),
+                image: MemoryImage(utils.dataFromBase64String(exercice.image)),
                 fit: BoxFit.cover,
               ),
             ),

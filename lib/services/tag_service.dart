@@ -20,7 +20,6 @@ class TagService extends ChangeNotifier{
   Future<void> getTagsByExercice(int id) async{
     final user = LoginService.user;
     FitGoalProvider.apiKey = '${user.type} ${user.token}';
-    print(FitGoalProvider.apiKey);
 
     if(user != null){
       final jsonData = await FitGoalProvider.getJsonData(
@@ -29,7 +28,6 @@ class TagService extends ChangeNotifier{
 
       final List<dynamic> jsonList = json.decode(jsonData);
       tags = Tag.fromJsonList(jsonList);
-      print(jsonList);
       notifyListeners();
     }
   }

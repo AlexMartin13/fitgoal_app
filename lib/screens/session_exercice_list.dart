@@ -1,4 +1,5 @@
 import 'package:fitgoal_app/services/exercice_service.dart';
+import 'package:fitgoal_app/utils/utils.dart';
 import 'package:fitgoal_app/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,7 +36,7 @@ class _SessionExerciceScreenState extends State<SessionExerciceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: reducedAppBar(context),
+      appBar: reducedAppBar(context, 'sessions'),
       backgroundColor: const Color.fromRGBO(1, 49, 45, 1),
       body: ListView.builder(
         itemCount: exercices.length,
@@ -67,9 +68,9 @@ class _SessionExerciceScreenState extends State<SessionExerciceScreen> {
             SizedBox(
               width: 100,
               height: 100,
-              child: FadeInImage.assetNetwork(
-                placeholder: 'assets/gif/loading.gif',
-                image: exercice.image,
+              child: FadeInImage(
+                placeholder: AssetImage('assets/gif/loading.gif'),
+                image: MemoryImage(utils.dataFromBase64String(exercice.image)),
                 fit: BoxFit.cover,
               ),
             ),
@@ -93,8 +94,10 @@ class _SessionExerciceScreenState extends State<SessionExerciceScreen> {
                       ),
                       PopupMenuButton<String>(
                         icon: const Icon(Icons.more_horiz, color: Colors.white),
-                        onSelected: (value) => handlePopupMenuSelected(value, exercice),
-                        itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                        onSelected: (value) =>
+                            handlePopupMenuSelected(value, exercice),
+                        itemBuilder: (BuildContext context) =>
+                            <PopupMenuEntry<String>>[
                           const PopupMenuItem<String>(
                             value: 'remove',
                             child: Text('Eliminar de la sesión'),
@@ -123,7 +126,7 @@ class _SessionExerciceScreenState extends State<SessionExerciceScreen> {
   void handlePopupMenuSelected(String value, Exercice exercice) {
     switch (value) {
       case 'add_to_list':
-      //TODO: Implement add to list
+        //TODO: Implement add to list
         break;
       case 'remove':
         showDialogToDeleteExerciceInSession(exercice);
@@ -131,41 +134,38 @@ class _SessionExerciceScreenState extends State<SessionExerciceScreen> {
     }
   }
 
-void showDialogToDeleteExerciceInSession(Exercice exercice) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text("Eliminar ejercicio de la sesión"),
-        content: Text("¿Estás seguro de que deseas eliminar este ejercicio de la sesión?"),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text("Cancelar"),
-
-
-            
-          ),
-          TextButton(
-            onPressed: () {
-              exerciceService?.removeExerciceFromSession(exercice, session!);
-              exerciceService?.getExercicesFromSession(session!.id).then((_) {
-                setState(() {
-                  exercices = exerciceService!.exercicesInSession;
+  void showDialogToDeleteExerciceInSession(Exercice exercice) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Eliminar ejercicio de la sesión"),
+          content: Text(
+              "¿Estás seguro de que deseas eliminar este ejercicio de la sesión?"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Cancelar"),
+            ),
+            TextButton(
+              onPressed: () {
+                exerciceService?.removeExerciceFromSession(exercice, session!);
+                exerciceService?.getExercicesFromSession(session!.id).then((_) {
+                  setState(() {
+                    exercices = exerciceService!.exercicesInSession;
+                  });
                 });
-              });
-              Navigator.of(context).pop(); // Cierra el diálogo
-            },
-            child: const Text("Eliminar"),
-          ),
-        ],
-      );
-    },
-  );
-}
-
+                Navigator.of(context).pop(); // Cierra el diálogo
+              },
+              child: const Text("Eliminar"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   List<Widget> _buildTagWidgets(List<Tag> tags) {
     return tags.map((Tag tag) {

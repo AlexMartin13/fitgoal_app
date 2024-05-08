@@ -14,7 +14,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: reducedAppBar(context),
+      appBar: reducedAppBar(context, '/'),
       backgroundColor: const Color.fromRGBO(1, 49, 45, 1),
       body: SingleChildScrollView(
         child: _RecoverBlock(context),
