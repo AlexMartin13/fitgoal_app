@@ -76,7 +76,7 @@ class FitGoalProvider extends ChangeNotifier {
     try {
       final response = await http.delete(url, headers: headers);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 204) {
         return response.body;
       } else {
         throw Exception('Error en la solicitud: ${response.statusCode}');
@@ -103,7 +103,7 @@ class FitGoalProvider extends ChangeNotifier {
     try {
       final response = await http.delete(url, headers: headers, body: jsonData);
 
-      if (response.statusCode >= 299) {
+      if (response.statusCode == 204) {
         return response.body;
       } else {
         throw Exception('Error en la solicitud: ${response.statusCode}');

@@ -40,7 +40,9 @@ class _CoachMenuState extends State<CoachMenu> {
         buttonHorizontalPadding: 90,
         buttonVerticalPadding: 20,
         textSize: 20,
-        function: () {});
+        function: () {
+          Navigator.pushNamed(context, 'players');
+        });
   }
 
   Widget _lineUpBtn() {

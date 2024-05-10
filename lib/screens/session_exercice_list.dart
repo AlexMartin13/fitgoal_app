@@ -123,49 +123,45 @@ class _SessionExerciceScreenState extends State<SessionExerciceScreen> {
     );
   }
 
-  void handlePopupMenuSelected(String value, Exercice exercice) {
-    switch (value) {
-      case 'add_to_list':
-        //TODO: Implement add to list
-        break;
-      case 'remove':
-        showDialogToDeleteExerciceInSession(exercice);
-        break;
-    }
+void handlePopupMenuSelected(String value, Exercice exercice) {
+  switch (value) {
+    case 'remove':
+      showDialogToDeleteExerciceInSession(exercice);
+      break;
   }
+}
 
-  void showDialogToDeleteExerciceInSession(Exercice exercice) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Eliminar ejercicio de la sesión"),
-          content: Text(
-              "¿Estás seguro de que deseas eliminar este ejercicio de la sesión?"),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("Cancelar"),
-            ),
-            TextButton(
-              onPressed: () {
-                exerciceService?.removeExerciceFromSession(exercice, session!);
-                exerciceService?.getExercicesFromSession(session!.id).then((_) {
-                  setState(() {
-                    exercices = exerciceService!.exercicesInSession;
-                  });
-                });
-                Navigator.of(context).pop(); // Cierra el diálogo
-              },
-              child: const Text("Eliminar"),
-            ),
-          ],
-        );
-      },
-    );
-  }
+void showDialogToDeleteExerciceInSession(Exercice exercice) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Eliminar ejercicio de la sesión"),
+        content: Text(
+            "¿Estás seguro de que deseas eliminar este ejercicio de la sesión?"),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("Cancelar"),
+          ),
+          TextButton(
+            onPressed: () {
+              exerciceService?.removeExerciceFromSession(exercice, session!);
+              setState(() {
+                exercices.remove(exercice); // Elimina el ejercicio de la lista local
+              });
+              Navigator.of(context).pop(); // Cierra el diálogo
+            },
+            child: const Text("Eliminar"),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 
   List<Widget> _buildTagWidgets(List<Tag> tags) {
     return tags.map((Tag tag) {

@@ -71,6 +71,8 @@ class _ExerciseMenuState extends State<ExerciseMenu> {
         buttonHorizontalPadding: 79,
         buttonVerticalPadding: 20,
         textSize: 20,
-        function: () {});
+        function: () {
+          Navigator.pushNamed(context, 'countdown');
+        });
   }
 }

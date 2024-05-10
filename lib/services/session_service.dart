@@ -30,6 +30,7 @@ class SessionService extends ChangeNotifier {
       final jsonData = await FitGoalProvider.getJsonData(
         'session/creator-id/${user.id}'
       );
+      print(user.team);
 
       final List<dynamic> jsonList = json.decode(jsonData);
       sessions = Session.fromJsonList(jsonList);

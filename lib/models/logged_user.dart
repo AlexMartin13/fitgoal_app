@@ -25,7 +25,6 @@ class LoggedUser {
     required this.roles
   });
 
-  // Constructor vacío
   LoggedUser.empty()
       : token = '',
         type = '',

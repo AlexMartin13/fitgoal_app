@@ -44,6 +44,8 @@ dependencies:
   async: ^2.11.0
   image_picker: ^1.1.1
   dotted_border: ^2.1.0
+  audioplayers: ^6.0.0
+  data_tables: ^1.4.0
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +75,7 @@ flutter:
      - assets/
      - assets/png_icons/
      - assets/gif/
+     - assets/mp3_sounds/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

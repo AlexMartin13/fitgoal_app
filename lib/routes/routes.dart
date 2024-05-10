@@ -13,5 +13,7 @@ Map<String, WidgetBuilder> getApplicationRoutes() {
     'add_exercice': (BuildContext context) => AddExerciceScreen(),
     'sessions': (BuildContext context) => SessionsScreen(),
     'session': (BuildContext context) => SessionExerciceScreen(),
+    'countdown': (BuildContext context) => CountdownPage(),
+    'players': (BuildContext context) => PlayersTableScreen()
   };
 }
