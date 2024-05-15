@@ -1,40 +1,49 @@
-import 'package:fitgoal_app/models/player.dart';
-import 'package:flutter/foundation.dart';
+import 'dart:convert';
 
-class Team {
+import 'package:fitgoal_app/models/models.dart';
+
+class Team{
   int id;
   String name;
-  String province;
-  String city;
   String crest;
-  List<Player>? players;
 
   Team({
     required this.id,
     required this.name,
-    required this.province,
-    required this.city,
-    required this.crest,
-    this.players,
+    required this.crest
   });
 
+  Team.empty()
+      : id = 0,
+        name = '',
+        crest = '';
+
+
+  factory Team.fromRawJson(String str) => Team.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
   factory Team.fromJson(Map<String, dynamic> json) => Team(
-        id: json['id'],
-        name: json['name'],
-        province: json['province'],
-        city: json['city'],
-        crest: json['crest'],
-        players: (json['players'] as List<dynamic>?)
-            ?.map((player) => Player.fromJson(player))
-            .toList(),
+        id: json["id"],
+        name: json["name"],
+        crest: json["crest"],
       );
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'province': province,
-        'city': city,
-        'crest': crest,
+        "name": name,
+        "crest": crest
       };
-}
 
+  @override
+  String toString() {
+    return 'Team {'
+        'id: $id, '
+        'name: $name, '
+        'crest: $crest,';
+  }
+
+  static List<Team> fromJsonList(List<dynamic> jsonList) {
+    return jsonList.map((json) => Team.fromJson(json)).toList();
+  }
+
+}

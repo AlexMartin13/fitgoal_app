@@ -46,6 +46,8 @@ dependencies:
   dotted_border: ^2.1.0
   audioplayers: ^6.0.0
   data_tables: ^1.4.0
+  animate_do: ^3.3.4
+  indexed: ^0.0.8
 
 dev_dependencies:
   flutter_test:

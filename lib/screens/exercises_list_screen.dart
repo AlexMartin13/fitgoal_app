@@ -131,7 +131,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
         showDialogToAddSession(exercice);
         break;
       case 'edit':
-        // Navigate to edit page or do edit functionality
+        print(exercice.image);
         break;
     }
   }

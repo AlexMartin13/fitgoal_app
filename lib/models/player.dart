@@ -1,29 +1,29 @@
 import 'dart:convert';
 
+import 'package:fitgoal_app/models/positions.dart';
+
 class Player {
   int id;
   String name;
+  String surname;
   String photo;
-  int yellowCards;
-  int redCards;
-  int minutes;
+  String position;
+
 
   Player({
     required this.id,
     required this.name,
+    required this.surname,
     required this.photo,
-    required this.yellowCards,
-    required this.redCards,
-    required this.minutes,
+    required this.position,
   });
 
   Player.empty()
       : id = 0,
         name = '',
+        surname = '',
         photo = '',
-        yellowCards = 0,
-        redCards = 0,
-        minutes = 0;
+        position = '';
 
   factory Player.fromRawJson(String str) =>
       Player.fromJson(json.decode(str));
@@ -33,19 +33,17 @@ class Player {
   factory Player.fromJson(Map<String, dynamic> json) => Player(
         id: json["id"],
         name: json["name"],
+        surname: json["surname"],
         photo: json["photo"],
-        yellowCards: json["yellowCards"],
-        redCards: json["redCards"],
-        minutes: json["minutes"],
+        position: json["positions"][0]
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
+        "surname": surname,
         "photo": photo,
-        "yellowCards": yellowCards,
-        "redCards": redCards,
-        "minutes": minutes,
+        "positions": position.toString()
       };
 
   @override
@@ -53,10 +51,9 @@ class Player {
     return 'PlayerSession {'
         'id: $id, '
         'name: $name, '
+        'surname: $surname,'
         'photo: $photo, '
-        'yellowCards: $yellowCards, '
-        'redCards: $redCards, '
-        'minutes: $minutes';
+        'position: $position';
   }
 
   static List<Player> fromJsonList(List<dynamic> jsonList) {

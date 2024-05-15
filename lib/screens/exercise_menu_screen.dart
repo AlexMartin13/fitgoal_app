@@ -1,15 +1,25 @@
 import 'package:fitgoal_app/services/login_service.dart';
+import 'package:fitgoal_app/services/team_service.dart';
 import 'package:fitgoal_app/ui/button_decoration.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ExerciseMenu extends StatefulWidget {
   const ExerciseMenu({super.key});
 
   @override
   State<ExerciseMenu> createState() => _ExerciseMenuState();
+  
 }
 
 class _ExerciseMenuState extends State<ExerciseMenu> {
+  
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<TeamService>(context, listen: false).getTeamLoggedUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +52,7 @@ class _ExerciseMenuState extends State<ExerciseMenu> {
         buttonVerticalPadding: 20,
         textSize: 20,
         function: () {
+          print(LoginService.user);
           Navigator.pushNamed(context, 'sessions');
         });
   }
