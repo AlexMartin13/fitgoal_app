@@ -36,7 +36,6 @@ class FitGoalProvider extends ChangeNotifier {
 
   static Future<String> getJsonData(String endpoint) async {
     final url = Uri.http(_baseUrl, endpoint);
-    print(url);
     Map<String, String> headers = {
       'Authorization': apiKey,
     };

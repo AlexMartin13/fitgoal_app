@@ -1,4 +1,6 @@
 import 'package:fitgoal_app/models/logged_user.dart';
+import 'package:fitgoal_app/screens/player_create_edit_screen.dart';
+import 'package:fitgoal_app/screens/player_info_screen.dart';
 import 'package:fitgoal_app/services/login_service.dart';
 import 'package:fitgoal_app/services/player_service.dart';
 import 'package:fitgoal_app/services/team_service.dart';
@@ -27,7 +29,7 @@ class _PlayersTableScreenState extends State<PlayersTableScreen> {
   }
 
   void _loadImage() {
-    teamService = Provider.of<TeamService>(context, listen: false); 
+    teamService = Provider.of<TeamService>(context, listen: false);
     teamService!.getTeamLoggedUser().then((_) {
       setState(() {
         image = MemoryImage(utils.dataFromBase64String(teamService!.image));
@@ -79,7 +81,14 @@ class _PlayersTableScreenState extends State<PlayersTableScreen> {
               children: [
                 IconButton(
                   onPressed: () {
-                    print(photo);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PlayerCreateEditScreen(
+                          previousRoute: 'players',
+                        ),
+                      ),
+                    );
                   },
                   icon: Icon(
                     Icons.add,
@@ -90,10 +99,9 @@ class _PlayersTableScreenState extends State<PlayersTableScreen> {
                 Text(
                   "Jugadores",
                   style: TextStyle(
-                    fontSize: 25,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold
-                  ),
+                      fontSize: 25,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
                 )
               ],
             ),
@@ -110,40 +118,54 @@ class _PlayersTableScreenState extends State<PlayersTableScreen> {
     }
   }
 
-Widget _buildTable(PlayerService playerService) {
-  return SingleChildScrollView(
-    scrollDirection: Axis.vertical,
-    child: Center(
-      child: DataTable(
-        showCheckboxColumn: false,
-        border: const TableBorder(verticalInside: BorderSide(width: 2, style: BorderStyle.solid, color: Color.fromRGBO(1, 49, 45, 1))),
-      
-        dataRowColor: MaterialStateProperty.all(Color.fromRGBO(234, 253, 231, 1)),
-        decoration: BoxDecoration(color: Color.fromRGBO(168, 202, 116, 1)),
-        columns: const [
-          DataColumn(label: Text('Nombre')),
-          DataColumn(label: Text('Apellidos')),
-          DataColumn(label: Text('Posición')),
-        ],
-        rows: playerService.players
-            .map(
-              (e) => DataRow(
-                selected: true,
-                onSelectChanged: (value) => {
-                  Navigator.pushNamed(context, 'player', arguments: e)
-                },
-                cells: [
-                  DataCell(Text(e.name)),
-                  DataCell(Text(e.surname)),
-                  DataCell(Text(e.position)),
-                ],
-              ),
-            )
-            .toList(),
+  Widget _buildTable(PlayerService playerService) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Center(
+        child: DataTable(
+          showCheckboxColumn: false,
+          border: const TableBorder(
+              verticalInside: BorderSide(
+                  width: 2,
+                  style: BorderStyle.solid,
+                  color: Color.fromRGBO(1, 49, 45, 1))),
+          dataRowColor:
+              MaterialStateProperty.all(Color.fromRGBO(234, 253, 231, 1)),
+          decoration: BoxDecoration(color: Color.fromRGBO(168, 202, 116, 1)),
+          columns: const [
+            DataColumn(label: Text('Nombre')),
+            DataColumn(label: Text('Apellidos')),
+            DataColumn(label: Text('Posición')),
+          ],
+          rows: playerService.players
+              .map(
+                (e) => DataRow(
+                  selected: true,
+                  onSelectChanged: (value) => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PlayerInfoScreen(),
+                        settings: RouteSettings(
+                          arguments: e,
+                        ),
+                      ),
+                    )
+                  },
+                  cells: [
+                    e.name.length >= 10
+                        ? DataCell(Text(e.name.substring(0, 10) + "..."))
+                        : DataCell(Text(e.name)),
+                    e.surname.length >= 10
+                        ? DataCell(Text(e.surname.substring(0, 10) + "..."))
+                        : DataCell(Text(e.surname)),
+                    DataCell(Text(e.position)),
+                  ],
+                ),
+              )
+              .toList(),
+        ),
       ),
-    ),
-  );
-}
-
-
+    );
+  }
 }

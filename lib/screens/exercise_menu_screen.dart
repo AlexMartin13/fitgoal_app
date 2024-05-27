@@ -52,7 +52,6 @@ class _ExerciseMenuState extends State<ExerciseMenu> {
         buttonVerticalPadding: 20,
         textSize: 20,
         function: () {
-          print(LoginService.user);
           Navigator.pushNamed(context, 'sessions');
         });
   }

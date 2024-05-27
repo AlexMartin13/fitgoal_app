@@ -31,8 +31,11 @@ AppBar reducedAppBar(BuildContext context, String previousRoute) {
             ),
           ),
           onTap: () {
-            if(previousRoute == 'session') Navigator.pushNamed(context, previousRoute);
-              Navigator.canPop(context) ? Navigator.pop(context) : Navigator.pushNamed(context, previousRoute);
+            if(previousRoute == 'exercices' || previousRoute == 'sessions'){
+              Navigator.pop(context);
+            }else{
+              Navigator.pushNamed(context, previousRoute);
+            }
           },
         ),
       );

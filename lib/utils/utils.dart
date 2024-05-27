@@ -10,4 +10,5 @@ class utils {
   static Uint8List dataFromBase64String(String base64String) {
     return base64Decode(base64String);
   }
+  static int teamId = 0;
 }

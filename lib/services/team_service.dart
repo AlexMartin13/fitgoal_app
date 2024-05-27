@@ -5,6 +5,7 @@ import 'package:fitgoal_app/models/team.dart';
 import 'package:fitgoal_app/provider/fitgoal_provider.dart';
 import 'package:fitgoal_app/services/login_service.dart';
 import 'package:fitgoal_app/services/player_service.dart';
+import 'package:fitgoal_app/utils/utils.dart';
 import 'package:flutter/foundation.dart';
 
 class TeamService extends ChangeNotifier{
@@ -23,6 +24,7 @@ class TeamService extends ChangeNotifier{
       team.name = jsonList['name'];
       image = team.crest;
       teamId = jsonList['id'];
+      utils.teamId = teamId;
     }
     notifyListeners();
   }

@@ -1,3 +1,4 @@
+import 'package:fitgoal_app/screens/exercice_info_screen.dart';
 import 'package:fitgoal_app/services/exercice_service.dart';
 import 'package:fitgoal_app/utils/utils.dart';
 import 'package:fitgoal_app/widgets/appbar.dart';
@@ -51,7 +52,13 @@ class _SessionExerciceScreenState extends State<SessionExerciceScreen> {
   Widget _buildExerciceItem(Exercice exercice) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, 'exercice', arguments: exercice);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ExerciceInfo(isFromSession: true),
+            settings: RouteSettings(arguments: exercice),
+          ),
+        );
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -123,45 +130,45 @@ class _SessionExerciceScreenState extends State<SessionExerciceScreen> {
     );
   }
 
-void handlePopupMenuSelected(String value, Exercice exercice) {
-  switch (value) {
-    case 'remove':
-      showDialogToDeleteExerciceInSession(exercice);
-      break;
+  void handlePopupMenuSelected(String value, Exercice exercice) {
+    switch (value) {
+      case 'remove':
+        showDialogToDeleteExerciceInSession(exercice);
+        break;
+    }
   }
-}
 
-void showDialogToDeleteExerciceInSession(Exercice exercice) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text("Eliminar ejercicio de la sesión"),
-        content: Text(
-            "¿Estás seguro de que deseas eliminar este ejercicio de la sesión?"),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text("Cancelar"),
-          ),
-          TextButton(
-            onPressed: () {
-              exerciceService?.removeExerciceFromSession(exercice, session!);
-              setState(() {
-                exercices.remove(exercice); // Elimina el ejercicio de la lista local
-              });
-              Navigator.of(context).pop(); // Cierra el diálogo
-            },
-            child: const Text("Eliminar"),
-          ),
-        ],
-      );
-    },
-  );
-}
-
+  void showDialogToDeleteExerciceInSession(Exercice exercice) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Eliminar ejercicio de la sesión"),
+          content: Text(
+              "¿Estás seguro de que deseas eliminar este ejercicio de la sesión?"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Cancelar"),
+            ),
+            TextButton(
+              onPressed: () {
+                exerciceService?.removeExerciceFromSession(exercice, session!);
+                setState(() {
+                  exercices.remove(
+                      exercice); // Elimina el ejercicio de la lista local
+                });
+                Navigator.of(context).pop(); // Cierra el diálogo
+              },
+              child: const Text("Eliminar"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   List<Widget> _buildTagWidgets(List<Tag> tags) {
     return tags.map((Tag tag) {

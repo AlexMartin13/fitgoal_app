@@ -208,8 +208,9 @@ class _AddExerciceScreenState extends State<AddExerciceScreen> {
           'description': _descriptionValue,
           'image': _imageBase64,
         };
+        print(data);
         exerciceService!.createExercice(data);
-        Navigator.popUntil(context, ModalRoute.withName('exercices'));
+        Navigator.popAndPushNamed(context, 'exercices');
       },
     );
   }

@@ -21,9 +21,7 @@ class LoginService extends ChangeNotifier {
 
 
   signIn(Map<String, dynamic> data) async {
-    print("data         $data");
     final jsonData = await FitGoalProvider.postJsonData('api/auth/signin/user', data);
-    print(jsonData);
     user = LoggedUser.fromJson(json.decode(jsonData));
     FitGoalProvider.apiKey = '${user.type} ${user.token}';
     notifyListeners();

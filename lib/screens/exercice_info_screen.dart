@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class ExerciceInfo extends StatefulWidget {
-  const ExerciceInfo({super.key});
+  final bool? isFromSession;
+  const ExerciceInfo({super.key, this.isFromSession});
 
   @override
   _ExerciceInfo createState() => _ExerciceInfo();

@@ -100,10 +100,6 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                             value: 'add_to_list',
                             child: Text('Añadir a lista'),
                           ),
-                          const PopupMenuItem<String>(
-                            value: 'edit',
-                            child: Text('Editar'),
-                          ),
                         ],
                       ),
                     ],
@@ -131,7 +127,6 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
         showDialogToAddSession(exercice);
         break;
       case 'edit':
-        print(exercice.image);
         break;
     }
   }
