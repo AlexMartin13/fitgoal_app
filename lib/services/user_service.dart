@@ -11,10 +11,16 @@ class UserService extends ChangeNotifier{
   String password = '';
 
   User user = new User.empty();
-
     signUpUser(Map<String, dynamic> data) async {
     final jsonData = await FitGoalProvider.postJsonData('api/auth/signup/user', data);
     user = User.fromJson(json.decode(jsonData));
     notifyListeners();
   } 
+  
+
+  changePassword(Map<String, dynamic> data, int id) async {
+  final jsonData = await FitGoalProvider.putJsonData('api/auth/user/changePassword/$id', data);
+  
+  notifyListeners();
+}
 }

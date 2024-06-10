@@ -55,7 +55,7 @@ class _PlayersTableScreenState extends State<PlayersTableScreen> {
                   if (playerService.players.isNotEmpty) {
                     return _buildTable(playerService);
                   } else {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(child: Text('No hay jugadores', style: TextStyle(color: Colors.white),));
                   }
                 },
               ),
@@ -108,7 +108,7 @@ class _PlayersTableScreenState extends State<PlayersTableScreen> {
             FadeInImage(
               placeholder: AssetImage('assets/gif/loading.gif'),
               image: photo,
-              fit: BoxFit.cover,
+              fit: BoxFit.fitHeight,
               width: 100,
               height: 100,
             ),
@@ -133,6 +133,7 @@ class _PlayersTableScreenState extends State<PlayersTableScreen> {
               MaterialStateProperty.all(Color.fromRGBO(234, 253, 231, 1)),
           decoration: BoxDecoration(color: Color.fromRGBO(168, 202, 116, 1)),
           columns: const [
+            DataColumn(label: Text('Dorsal')),
             DataColumn(label: Text('Nombre')),
             DataColumn(label: Text('Apellidos')),
             DataColumn(label: Text('Posición')),
@@ -153,6 +154,7 @@ class _PlayersTableScreenState extends State<PlayersTableScreen> {
                     )
                   },
                   cells: [
+                    DataCell(Text(e.number.toString())),
                     e.name.length >= 10
                         ? DataCell(Text(e.name.substring(0, 10) + "..."))
                         : DataCell(Text(e.name)),

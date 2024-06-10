@@ -8,6 +8,7 @@ class Player {
   String surname;
   String photo;
   String position;
+  int number;
   int teamId;
 
   Player({
@@ -16,6 +17,7 @@ class Player {
     required this.surname,
     required this.photo,
     required this.position,
+    required this.number,
     required this.teamId,
   });
 
@@ -25,6 +27,7 @@ class Player {
         surname = '',
         photo = '',
         position = '',
+        number = 0,
         teamId = 0;
 
   Player copyWith({
@@ -32,7 +35,8 @@ class Player {
     String? surname,
     String? position,
     String? photo,
-    int? teamId
+    int? teamId,
+    int? number
   }) {
     return Player(
       id: id ?? this.id,
@@ -40,6 +44,7 @@ class Player {
       surname: surname ?? this.surname,
       position: position ?? this.position,
       photo: photo ?? this.photo,
+      number: number ?? this.number,
       teamId: teamId ?? 0
     );
   }
@@ -54,6 +59,7 @@ class Player {
       surname: json["surname"],
       photo: json["photo"],
       position: json["positions"],
+      number: json["number"],
       teamId: json["team"]["id"] );
 
   Map<String, dynamic> toJson() => {
@@ -62,6 +68,7 @@ class Player {
         "surname": surname,
         "photo": photo,
         "positions": position.toString(),
+        "number": number,
         "teamId": teamId,
       };
 
@@ -73,6 +80,7 @@ class Player {
         'surname: $surname,'
         'photo: $photo, '
         'positions: $position,'
+        'number: $number,'
         'teamId: $teamId';
   }
 

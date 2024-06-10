@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:fitgoal_app/services/login_service.dart';
 import 'package:fitgoal_app/ui/button_decoration.dart';
 import 'package:fitgoal_app/ui/input_decoration.dart';
@@ -15,34 +14,74 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final loginService = new LoginService();
+
   @override
   Widget build(BuildContext context) {
+    final loginService = Provider.of<LoginService>(context);
+
     return Scaffold(
       appBar: appBarFitGoalComplete(),
       backgroundColor: const Color.fromRGBO(1, 49, 45, 1),
       body: SingleChildScrollView(
-        child: _LoginBlock(context),
+        child: _LoginBlock(context, loginService),
       ),
     );
   }
 
-  Widget _LoginForm() {
+  Widget _LoginBlock(BuildContext context, LoginService loginService) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 50),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                border: Border.all(
+                    color: const Color.fromRGBO(114, 191, 1, 1), width: 1.5),
+              ),
+              child: Container(
+                width: 310,
+                height: 380,
+                child: Column(
+                  children: [
+                    const SizedBox(height: 30),
+                    _LoginForm(loginService),
+                    const SizedBox(height: 20),
+                    _LoginBtn(loginService),
+                    const SizedBox(height: 10),
+                    _ForgotPass(context)
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 30),
+          child: _SignInButton(),
+        )
+      ],
+    );
+  }
+
+  Widget _LoginForm(LoginService loginService) {
     return Container(
       child: Form(
           key: _formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             children: [
-              _email(),
-              _password(),
+              _email(loginService),
+              _password(loginService),
               SizedBox(height: 30),
             ],
           )),
     );
   }
 
-  Widget _LoginBtn() {
+  Widget _LoginBtn(LoginService loginService) {
     return ButtonDecorations.buttonDecoration(
         borderButtonColor: Color.fromRGBO(114, 191, 1, 1),
         buttonColor: Color(0xffEAFDE7),
@@ -109,45 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ));
   }
 
-  Column _LoginBlock(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 50),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                border: Border.all(
-                    color: const Color.fromRGBO(114, 191, 1, 1), width: 1.5),
-              ),
-              child: Container(
-                width: 310,
-                height: 380,
-                child: Column(
-                  children: [
-                    const SizedBox(height: 30),
-                    _LoginForm(),
-                    const SizedBox(height: 20),
-                    _LoginBtn(),
-                    const SizedBox(height: 10),
-                    _ForgotPass(context)
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 30),
-          child: _SignInButton(),
-        )
-      ],
-    );
-  }
-
-  TextFormField _email() {
+  TextFormField _email(LoginService loginService) {
     return TextFormField(
       autocorrect: false,
       keyboardType: TextInputType.emailAddress,
@@ -171,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  TextFormField _password() {
+  TextFormField _password(LoginService loginService) {
     return TextFormField(
       autocorrect: false,
       keyboardType: TextInputType.visiblePassword,

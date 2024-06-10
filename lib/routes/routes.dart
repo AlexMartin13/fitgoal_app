@@ -1,6 +1,3 @@
-
-import 'package:fitgoal_app/screens/player_create_edit_screen.dart';
-import 'package:fitgoal_app/screens/player_info_screen.dart';
 import 'package:fitgoal_app/screens/screens.dart';
 import 'package:flutter/material.dart';
 
@@ -19,5 +16,10 @@ Map<String, WidgetBuilder> getApplicationRoutes() {
     'players': (BuildContext context) => PlayersTableScreen(),
     'player': (BuildContext context) => PlayerInfoScreen(),
     'playerCreation': (BuildContext context) => PlayerCreateEditScreen(),
+    'board': (BuildContext context) => BoardScreen(),
+    'align': (BuildContext context) => PlayerAlignScreen(),
+    'settings': (BuildContext context) => SettingsScreen(),
+    'changePassword': (BuildContext context) => ChangePasswordScreen(),
+    'link': (BuildContext context) => LinkTeamScreen()
   };
 }

@@ -48,6 +48,12 @@ dependencies:
   data_tables: ^1.4.0
   animate_do: ^3.3.4
   indexed: ^0.0.8
+  permission_handler: ^11.3.1
+  file_picker: ^8.0.3
+  flutter_draggable_gridview: 
+  shared_preferences: ^2.2.3
+  youtube_player_flutter: ^9.0.1
+  flutter_inappwebview:
 
 dev_dependencies:
   flutter_test:

@@ -19,7 +19,7 @@ class AddExerciceScreen extends StatefulWidget {
 class _AddExerciceScreenState extends State<AddExerciceScreen> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
-
+  TextEditingController _youtubeLinkController = TextEditingController();
   String _nameValue = '';
   String _descriptionValue = '';
   String? _imageBase64;
@@ -42,6 +42,10 @@ class _AddExerciceScreenState extends State<AddExerciceScreen> {
               const SizedBox(height: 20),
               _exerciceNameField(),
               const SizedBox(height: 20),
+              _youtubeLinkField(),
+              const SizedBox(
+                height: 20,
+              ),
               _descriptionField(),
               const SizedBox(height: 20),
               _buttonAddExercice(),
@@ -128,6 +132,30 @@ class _AddExerciceScreenState extends State<AddExerciceScreen> {
     }
   }
 
+  Widget _youtubeLinkField() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.8,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+        border: Border.all(width: 3),
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: TextField(
+          controller: _youtubeLinkController,
+          style: const TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+          ),
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintStyle: TextStyle(
+              color: Colors.white.withOpacity(0.5),
+            ),
+            hintText: 'YouTube Link',
+          )),
+    );
+  }
+
   Widget _exerciceNameField() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.8,
@@ -137,6 +165,7 @@ class _AddExerciceScreenState extends State<AddExerciceScreen> {
         borderRadius: BorderRadius.circular(25),
       ),
       child: TextField(
+        maxLength: 40,
         controller: _nameController,
         style: const TextStyle(
           fontSize: 20,
@@ -169,6 +198,7 @@ class _AddExerciceScreenState extends State<AddExerciceScreen> {
         borderRadius: BorderRadius.circular(25),
       ),
       child: TextField(
+        maxLength: 250,
         controller: _descriptionController,
         maxLines: null,
         style: const TextStyle(
@@ -192,28 +222,49 @@ class _AddExerciceScreenState extends State<AddExerciceScreen> {
     );
   }
 
-  Widget _buttonAddExercice() {
-    return ButtonDecorations.buttonDecoration(
-      textButton: 'Añadir Ejercicio',
-      textColor: Colors.white,
-      textStrokeColor: Color.fromRGBO(1, 49, 45, 1),
-      borderButtonColor: Color.fromRGBO(114, 191, 1, 1),
-      buttonColor: Color(0xffEAFDE7),
-      buttonHorizontalPadding: 40,
-      buttonVerticalPadding: 20,
-      textSize: 14,
-      function: () {
-        var data = {
-          'name': _nameValue,
-          'description': _descriptionValue,
-          'image': _imageBase64,
-        };
-        print(data);
-        exerciceService!.createExercice(data);
-        Navigator.popAndPushNamed(context, 'exercices');
-      },
-    );
-  }
+Widget _buttonAddExercice() {
+  return ButtonDecorations.buttonDecoration(
+    textButton: 'Añadir Ejercicio',
+    textColor: Colors.white,
+    textStrokeColor: Color.fromRGBO(1, 49, 45, 1),
+    borderButtonColor: Color.fromRGBO(114, 191, 1, 1),
+    buttonColor: Color(0xffEAFDE7),
+    buttonHorizontalPadding: 40,
+    buttonVerticalPadding: 20,
+    textSize: 14,
+    function: () async {
+      // Verificar si falta algún campo
+      bool missingField = false;
+      if (_imageBase64 == null ||
+          _nameValue.isEmpty ||
+          _descriptionValue.isEmpty) {
+        missingField = true;
+      }
+
+      if (missingField) {
+        String unfilledFields = '';
+        if (_nameValue == '') unfilledFields += 'nombre, ';
+        if (_descriptionValue == '') unfilledFields += 'descripción, ';
+        if (_imageBase64 == null) unfilledFields += 'imagen';
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content:
+                Text('Faltan los siguientes campos: $unfilledFields')));
+        return;
+      }
+
+      var data = {
+        'name': _nameValue,
+        'description': _descriptionValue,
+        'image': _imageBase64,
+        'video': _youtubeLinkController.text,
+      };
+      await exerciceService!.createExercice(data);
+      Navigator.pushNamedAndRemoveUntil(
+                context, 'exercices', (route) => false); // Pasamos true como resultado indicando que se añadió un ejercicio.
+    },
+  );
+}
+
 
   static String getBase64FormateFile(String path) {
     File file = File(path);

@@ -5,8 +5,11 @@ import 'package:fitgoal_app/services/player_service.dart';
 import 'package:fitgoal_app/services/session_service.dart';
 import 'package:fitgoal_app/services/tag_service.dart';
 import 'package:fitgoal_app/services/team_service.dart';
+import 'package:fitgoal_app/services/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:provider/provider.dart';
+
 
 void main() {
   runApp(const FitGoal());
@@ -36,6 +39,9 @@ class FitGoal extends StatelessWidget {
           ),
           ChangeNotifierProvider.value(
             value: PlayerService(),
+          ),
+          ChangeNotifierProvider.value(
+            value: UserService(),
           )
         ],
         child: MaterialApp(

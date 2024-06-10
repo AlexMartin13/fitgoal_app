@@ -1,4 +1,6 @@
+import 'package:fitgoal_app/services/team_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'screens.dart';
 
@@ -11,6 +13,8 @@ class BottomNavigation extends StatefulWidget {
 
 class _BottomNavigationState extends State<BottomNavigation> {
   int _selectedIndex = 0;
+  TeamService? teamService;
+  int _teamId = 0;
 
   final List<Widget> _pages = [
     ExerciseMenu(),
@@ -18,7 +22,17 @@ class _BottomNavigationState extends State<BottomNavigation> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    Provider.of<TeamService>(context, listen: false).getTeamLoggedUser();
+    teamService = Provider.of<TeamService>(context, listen: false);
+    teamService!.getTeamLoggedUser();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _teamId = teamService!.teamId;
+    print(_teamId);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -44,6 +58,11 @@ class _BottomNavigationState extends State<BottomNavigation> {
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
           setState(() {
+            if (_teamId == 0) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Vincula tu usuario a un equipo para acceder a estas características')));
+              return;
+            }
             _selectedIndex = index;
           });
         },

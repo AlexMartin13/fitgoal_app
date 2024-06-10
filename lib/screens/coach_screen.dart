@@ -55,7 +55,9 @@ class _CoachMenuState extends State<CoachMenu> {
         buttonHorizontalPadding: 90,
         buttonVerticalPadding: 20,
         textSize: 20,
-        function: () {});
+        function: () {
+          Navigator.pushNamed(context, 'align');
+        });
   }
 
     Widget _boardBtn() {
@@ -68,6 +70,8 @@ class _CoachMenuState extends State<CoachMenu> {
         buttonHorizontalPadding: 105,
         buttonVerticalPadding: 20,
         textSize: 20,
-        function: () {});
+        function: () {
+          Navigator.pushNamed(context, 'board');
+        });
   }
 }

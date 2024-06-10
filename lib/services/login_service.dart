@@ -14,6 +14,8 @@ class LoginService extends ChangeNotifier {
 
   static LoggedUser user = LoggedUser.empty();
   static String token = '';
+  static int id = 0;
+
 
   final debouncer = Debouncer(duration: Duration(milliseconds: 500));
 
@@ -24,10 +26,12 @@ class LoginService extends ChangeNotifier {
     final jsonData = await FitGoalProvider.postJsonData('api/auth/signin/user', data);
     user = LoggedUser.fromJson(json.decode(jsonData));
     FitGoalProvider.apiKey = '${user.type} ${user.token}';
+    id = user.id;
     notifyListeners();
   }
 
   bool isValidForm() {
     return formKey.currentState?.validate() ?? false;
   }
+
 }

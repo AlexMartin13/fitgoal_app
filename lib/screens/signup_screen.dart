@@ -24,7 +24,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: reducedAppBar(context, '/'),
+      appBar: reducedAppBarWithoutProfile(context, '/'),
       backgroundColor: const Color.fromRGBO(1, 49, 45, 1),
       body: SingleChildScrollView(
         child: _SignInBlock(),

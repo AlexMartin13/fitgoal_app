@@ -17,7 +17,7 @@ class ExercisesScreen extends StatefulWidget {
 
 class _ExercisesScreenState extends State<ExercisesScreen> {
   Session? selectedSession;
-  String data = 'Select a session';
+  String data = 'Selecciona una sesión';
   ExerciceService exerciceService = ExerciceService();
   @override
   void initState() {
@@ -138,7 +138,7 @@ void showDialogToAddSession(Exercice exercice) {
       return StatefulBuilder(
         builder: (context, setState) {
           return AlertDialog(
-            title: Text("Select Session"),
+            title: Text("Selecciona una sesión"),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -27,6 +27,7 @@ class PlayerCreateEditScreen extends StatefulWidget {
 class _PlayerCreateEditScreenState extends State<PlayerCreateEditScreen> {
   late TextEditingController _nameController;
   late TextEditingController _surnameController;
+  late TextEditingController _numberController; // New controller for number
   String? _selectedPosition;
   File? _image;
   Player? _player;
@@ -38,6 +39,7 @@ class _PlayerCreateEditScreenState extends State<PlayerCreateEditScreen> {
     super.initState();
     _nameController = TextEditingController();
     _surnameController = TextEditingController();
+    _numberController = TextEditingController(); // Initialize the new controller
   }
 
   @override
@@ -48,6 +50,7 @@ class _PlayerCreateEditScreenState extends State<PlayerCreateEditScreen> {
       if (_player != null) {
         _nameController.text = _player!.name;
         _surnameController.text = _player!.surname;
+        _numberController.text = _player!.number.toString(); // Set the initial value for number
         _selectedPosition = _player!.position;
       }
     }
@@ -57,6 +60,7 @@ class _PlayerCreateEditScreenState extends State<PlayerCreateEditScreen> {
   void dispose() {
     _nameController.dispose();
     _surnameController.dispose();
+    _numberController.dispose(); // Dispose of the new controller
     super.dispose();
   }
 
@@ -118,6 +122,8 @@ class _PlayerCreateEditScreenState extends State<PlayerCreateEditScreen> {
               SizedBox(height: 20),
               SurnameField(controller: _surnameController),
               SizedBox(height: 20),
+              NumberField(controller: _numberController), // Add the new field here
+              SizedBox(height: 20),
               PositionDropdown(
                 selectedPosition: _selectedPosition,
                 onChanged: (String? newValue) {
@@ -147,7 +153,7 @@ class _PlayerCreateEditScreenState extends State<PlayerCreateEditScreen> {
   Widget _buttonAccept() {
     return Center(
       child: ButtonDecorations.buttonDecoration(
-        textButton: _player == null ? 'Añadir Jugador' : 'Editar  jugador',
+        textButton: _player == null ? 'Añadir Jugador' : 'Editar jugador',
         textColor: Colors.white,
         textStrokeColor: Color.fromRGBO(1, 49, 45, 1),
         borderButtonColor: Color.fromRGBO(114, 191, 1, 1),
@@ -158,12 +164,13 @@ class _PlayerCreateEditScreenState extends State<PlayerCreateEditScreen> {
         function: () async {
           String name = _nameController.text;
           String surname = _surnameController.text;
+          String number = _numberController.text; // Get the number value
           String position = _selectedPosition ?? '';
           String photo = _image != null
               ? await getBase64FormateFile(_image!)
               : _player?.photo ?? '';
 
-          if (name.isEmpty || surname.isEmpty || position.isEmpty || photo.isEmpty) {
+          if (name.isEmpty || surname.isEmpty || number.isEmpty || position.isEmpty || photo.isEmpty) {
             _showIncompleteFieldsAlert();
             return;
           }
@@ -171,6 +178,7 @@ class _PlayerCreateEditScreenState extends State<PlayerCreateEditScreen> {
           var data = {
             'Name': name,
             'Surname': surname,
+            'number': int.parse(number), // Add the number to the data
             'position': position,
             'photo': photo,
             'teamId': teamId,
@@ -240,6 +248,34 @@ class SurnameField extends StatelessWidget {
           controller: controller,
           decoration: InputDecoration(
             hintText: 'Doe',
+            hintStyle: TextStyle(color: Colors.white70),
+          ),
+          style: TextStyle(color: Colors.white),
+        ),
+      ],
+    );
+  }
+}
+
+class NumberField extends StatelessWidget {
+  final TextEditingController controller;
+
+  const NumberField({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Dorsal',
+          style: TextStyle(color: Colors.white),
+        ),
+        TextFormField(
+          controller: controller,
+          keyboardType: TextInputType.number, // Set keyboard type to number
+          decoration: InputDecoration(
+            hintText: '10',
             hintStyle: TextStyle(color: Colors.white70),
           ),
           style: TextStyle(color: Colors.white),

@@ -13,11 +13,12 @@ class ExerciseMenu extends StatefulWidget {
 }
 
 class _ExerciseMenuState extends State<ExerciseMenu> {
-  
+
   @override
   void initState() {
     super.initState();
     Provider.of<TeamService>(context, listen: false).getTeamLoggedUser();
+
   }
 
   @override

@@ -3,6 +3,7 @@ import 'package:fitgoal_app/utils/utils.dart';
 import 'package:fitgoal_app/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class ExerciceInfo extends StatefulWidget {
   final bool? isFromSession;
@@ -17,6 +18,25 @@ class _ExerciceInfo extends State<ExerciceInfo> {
   String _description = '';
   String _image = '';
   String _video = '';
+  late YoutubePlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = YoutubePlayerController(
+      initialVideoId: '',
+      flags: const YoutubePlayerFlags(
+        autoPlay: false,
+        mute: false,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +45,10 @@ class _ExerciceInfo extends State<ExerciceInfo> {
       _name = exercice.name;
       _description = exercice.description;
       _image = exercice.image;
-      _video = '';
+      _video = exercice.video ?? '';
+      _controller.load(YoutubePlayer.convertUrlToId(_video) ?? '');
     });
+    print("video" + _video);
     return Scaffold(
       appBar: reducedAppBar(context, 'exercices'),
       backgroundColor: const Color.fromRGBO(1, 49, 45, 1),
@@ -35,7 +57,7 @@ class _ExerciceInfo extends State<ExerciceInfo> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 20),
-            _imageLocation(),
+            _imageLocation(exercice),
             const SizedBox(height: 20),
             _exerciceName(context),
             const SizedBox(height: 20),
@@ -46,14 +68,13 @@ class _ExerciceInfo extends State<ExerciceInfo> {
     );
   }
 
-  Widget _imageLocation() {
-    return Container(width: 300, height: 300, child: _carrousel());
+  Widget _imageLocation(Exercice e) {
+    return Container(width: 300, height: 300, child: _carousel(e));
   }
 
   Widget _exerciceName(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width *
-          0.8, // Ajustar el ancho según sea necesario
+      width: MediaQuery.of(context).size.width * 0.8,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         border: Border.all(width: 3),
@@ -94,20 +115,33 @@ class _ExerciceInfo extends State<ExerciceInfo> {
     );
   }
 
-  Widget _carrousel() {
+  Widget _carousel(Exercice e) {
+    print("longitud carousel" + _video);
     return CarouselSlider.builder(
-        itemCount: 2,
-        itemBuilder: (ctx, index, realIdx) {
+      itemCount: _video == '' ? 1 : 2,
+      itemBuilder: (ctx, index, realIdx) {
+        if (index == 0) {
           return FadeInImage(
-            placeholder: AssetImage('assets/gif/loading.gif'),
+            placeholder: const AssetImage('assets/gif/loading.gif'),
             image: MemoryImage(utils.dataFromBase64String(_image)),
             fit: BoxFit.cover,
           );
-        },
-        options: CarouselOptions(
-          autoPlay: false,
-          enlargeCenterPage: true,
-          aspectRatio: 1.5,
-        ));
+        } else {
+          return YoutubePlayer(
+            controller: _controller,
+            showVideoProgressIndicator: true,
+            progressIndicatorColor: Colors.amber,
+            onReady: () {
+              _controller.load(YoutubePlayer.convertUrlToId(_video) ?? '');
+            },
+          );
+        }
+      },
+      options: CarouselOptions(
+        autoPlay: false,
+        enlargeCenterPage: true,
+        aspectRatio: 1.5,
+      ),
+    );
   }
 }
