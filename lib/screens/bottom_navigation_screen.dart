@@ -13,7 +13,6 @@ class BottomNavigation extends StatefulWidget {
 
 class _BottomNavigationState extends State<BottomNavigation> {
   int _selectedIndex = 0;
-  TeamService? teamService;
   int _teamId = 0;
 
   final List<Widget> _pages = [
@@ -24,14 +23,19 @@ class _BottomNavigationState extends State<BottomNavigation> {
   @override
   void initState() {
     super.initState();
-    Provider.of<TeamService>(context, listen: false).getTeamLoggedUser();
-    teamService = Provider.of<TeamService>(context, listen: false);
-    teamService!.getTeamLoggedUser();
+    // Se elimina una llamada duplicada a getTeamLoggedUser()
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<TeamService>(context, listen: false).getTeamLoggedUser().then((_) {
+        setState(() {
+          _teamId = Provider.of<TeamService>(context, listen: false).teamId;
+        });
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    _teamId = teamService!.teamId;
+    // No es necesario asignar _teamId aquí
     print(_teamId);
     return Scaffold(
       appBar: AppBar(
@@ -57,12 +61,12 @@ class _BottomNavigationState extends State<BottomNavigation> {
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         onTap: (index) {
+          if (_teamId == 0) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Vincula tu usuario a un equipo para acceder a estas características')));
+            return;
+          }
           setState(() {
-            if (_teamId == 0) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Vincula tu usuario a un equipo para acceder a estas características')));
-              return;
-            }
             _selectedIndex = index;
           });
         },
@@ -81,29 +85,21 @@ class _BottomNavigationState extends State<BottomNavigation> {
     return BottomNavigationBarItem(
       icon: Transform.scale(
         scale: 1,
-        child: _selectedIndex == 0
-            ? index == 0
-                ? Image.asset(
-                    "assets/png_icons/exercise_icon_activated.png",
-                    width: 40,
-                    height: 40,
-                  )
-                : Image.asset(
-                    "assets/png_icons/team_icon.png",
-                    width: 40,
-                    height: 40,
-                  )
-            : index == 0
-                ? Image.asset(
-                    "assets/png_icons/exercise_icon.png",
-                    width: 40,
-                    height: 40,
-                  )
-                : Image.asset(
-                    "assets/png_icons/team_icon_activated.png",
-                    width: 40,
-                    height: 40,
-                  ),
+        child: _selectedIndex == index
+            ? Image.asset(
+                index == 0
+                    ? "assets/png_icons/exercise_icon_activated.png"
+                    : "assets/png_icons/team_icon_activated.png",
+                width: 40,
+                height: 40,
+              )
+            : Image.asset(
+                index == 0
+                    ? "assets/png_icons/exercise_icon.png"
+                    : "assets/png_icons/team_icon.png",
+                width: 40,
+                height: 40,
+              ),
       ),
       label: "",
     );

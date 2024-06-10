@@ -36,6 +36,7 @@ class FitGoalProvider extends ChangeNotifier {
 
   static Future<String> getJsonData(String endpoint) async {
     final url = Uri.http(_baseUrl, endpoint);
+    print(url);
     Map<String, String> headers = {
       'Authorization': apiKey,
     };
@@ -76,7 +77,7 @@ class FitGoalProvider extends ChangeNotifier {
     try {
       final response = await http.delete(url, headers: headers);
 
-      if (response.statusCode == 204) {
+      if (response.statusCode == 204 || response.statusCode == 200) {
         return response.body;
       } else {
         throw Exception('Error en la solicitud: ${response.statusCode}');

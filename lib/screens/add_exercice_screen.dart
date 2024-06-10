@@ -260,7 +260,7 @@ Widget _buttonAddExercice() {
       };
       await exerciceService!.createExercice(data);
       Navigator.pushNamedAndRemoveUntil(
-                context, 'exercices', (route) => false); // Pasamos true como resultado indicando que se añadió un ejercicio.
+                context, 'exercices', (route) => false);
     },
   );
 }

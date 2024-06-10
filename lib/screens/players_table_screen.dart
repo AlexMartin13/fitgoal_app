@@ -135,7 +135,6 @@ class _PlayersTableScreenState extends State<PlayersTableScreen> {
           columns: const [
             DataColumn(label: Text('Dorsal')),
             DataColumn(label: Text('Nombre')),
-            DataColumn(label: Text('Apellidos')),
             DataColumn(label: Text('Posición')),
           ],
           rows: playerService.players
@@ -155,12 +154,9 @@ class _PlayersTableScreenState extends State<PlayersTableScreen> {
                   },
                   cells: [
                     DataCell(Text(e.number.toString())),
-                    e.name.length >= 10
-                        ? DataCell(Text(e.name.substring(0, 10) + "..."))
-                        : DataCell(Text(e.name)),
-                    e.surname.length >= 10
-                        ? DataCell(Text(e.surname.substring(0, 10) + "..."))
-                        : DataCell(Text(e.surname)),
+                    ("${e.name} ${e.surname}").length <= 17 
+                        ? DataCell(Text("${e.name} ${e.surname}"))
+                        : DataCell(Text(("${e.name} ${e.surname}").substring(0, 17))),
                     DataCell(Text(e.position)),
                   ],
                 ),

@@ -189,7 +189,8 @@ class _PlayerCreateEditScreenState extends State<PlayerCreateEditScreen> {
           } else {
             playerService.updatePlayer(_player!.id, data);
           }
-          Navigator.popAndPushNamed(context, 'players');
+                Navigator.pushNamedAndRemoveUntil(
+                context, 'players', (route) => false);
         },
       ),
     );
