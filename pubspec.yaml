@@ -54,6 +54,8 @@ dependencies:
   shared_preferences: ^2.2.3
   youtube_player_flutter: ^9.0.1
   flutter_inappwebview:
+  flutter_native_splash: ^2.4.0
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -66,7 +68,11 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^3.0.0
 
-
+flutter_icons:
+  adaptive_icon_background: "#01312D"
+  image_path: "assets/png_icons/icon.png"
+  android: true 
+  ios: true
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
