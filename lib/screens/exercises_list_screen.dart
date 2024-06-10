@@ -164,7 +164,7 @@ void showDialogToAddSession(Exercice exercice) {
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
-                      'Session: ${selectedSession!.name}',
+                      'Sesión: ${selectedSession!.name}',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
